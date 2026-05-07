@@ -78,7 +78,7 @@ function loadSettings() {
     }
 
     // Theme Selection
-    loadValueSetting('themeSelection', 'dark-theme');
+    loadValueSetting('themeSelection', 'system-theme');
     themeSelectionChanged();
 }
 
