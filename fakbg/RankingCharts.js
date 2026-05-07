@@ -57,7 +57,7 @@ function destroyRankingChart(message) {
 // Dynamically adjust canvas height based on the number of players
 function optimizeChartCanvasHeight(rankingChartCanvas, numberOfPlayers) {
     const heightPerPlayer = 20; // Height per player in pixels
-    const additionalHeight = 100;
+    const additionalHeight = 120;
     const minHeight = additionalHeight + heightPerPlayer; // Minimum height for the canvas
     document.getElementById(rankingChartCanvas).height = Math.max(numberOfPlayers * heightPerPlayer + additionalHeight, minHeight);
 }
