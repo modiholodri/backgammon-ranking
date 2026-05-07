@@ -92,7 +92,7 @@ function highlightYourNameInTable(tableHTML) {
     const regex = new RegExp(`\\b(${yourName})\\b`, 'gi');
     tableHTML = tableHTML.replace(
         regex,
-        `<span style="color: green;"><b>${yourName}</b></span>`
+        `<span style="color: yellow;"><b>${yourName}</b></span>`
     );
     return tableHTML;
 }

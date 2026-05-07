@@ -1,15 +1,38 @@
+/* Theme Variables */
+:root {
+    --text: "Select Players...";
+    --bg-primary: #000000;
+    --bg-secondary: #1d1d1d;
+    --text-primary: #e0e0e0;
+    --text-accent: rgb(55, 82, 255);
+    --button-primary: blue;
+    --border-accent: #2d2d2d;
+    --bs-border-color: #0d0064;
+}
+
+body.light-theme {
+    --bg-primary: #0d0064;
+    --bg-secondary: #140099;
+    --text-primary: #ffffff;
+    --text-accent: #61e7ff;
+    --button-primary: #0004fd;
+    --border-accent: #1d00db;
+    --bs-border-color: #1d00db;
+}
+
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
 }
+
 body {
-    background-color: #0d0064;
-    color: #ffffff;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color:#61e7ff;
+    color: var(--text-accent);
     text-align: center;
     margin-top: 15px;
 }
@@ -20,10 +43,10 @@ table {
 }
 
 th {
+    background-color: var(--bg-primary);
+    color: var(--text-accent);
     padding: 3px;
     text-align: center;
-    background-color: #0d0064;
-    color: #61e7ff;
     white-space: nowrap;
 }
 
@@ -33,7 +56,7 @@ td {
 }
 
 tr:nth-child(odd) {
-    background-color: #1600a8;
+    background-color: var(--bg-secondary);
 }
 
 canvas {
@@ -41,6 +64,7 @@ canvas {
     padding: 0;
     height: auto; /* Adjust height automatically based on content */
 }
+
 .container-fluid {
     position: relative; 
     width: 100%; 
@@ -53,52 +77,59 @@ canvas {
 }
 
 .btn-primary {
-    background-color: #0004fd;
-    border-color: #1eff29;
+    background-color: var(--button-primary);
     margin-top: 15px;
 }
 
 .btn-secondary {
-    background-color: #0d0064;
-    border-color: #1eff29;
-    margin-top: 15px;
-}
-
-.input-group-text, .form-select, .form-control {
+    background-color: var(--bg-primary);
     margin-top: 15px;
 }
 
 .input-group {
     display: flex;
     align-items: center;
+    margin-top: 15px;
 }
+
 .input-group-text {
+    background-color: var(--bg-secondary);
+    color: gray;
+    margin-top: 15px;
     flex: 0 0 auto;
 }
+
 .form-control {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    margin-top: 15px;
     flex: 1 1 auto;
     flex-shrink: 1; /* Allow the input to shrink */
     min-width: 0; /* Ensure it can shrink to 0 */
 }
+
+.form-check-label {
+    color: gray;
+}
+
 .form-select {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    margin-top: 15px;
     flex: 0 0 auto;
     white-space: nowrap; /* Prevent the select from shrinking */
 }
 
 hr.rounded {
-    border-top: 8px solid #000000;
+    border-top: 8px solid var(--button-primary);
     border-radius: 5px;
+    background-color: transparent;
 }
 
 .centered {
     text-align: center;
 }
 
-
-:root
-{
-	--text: "Select Tournament Players...";
-}
 .multiple_select {
     height: 36px;
     overflow: hidden;
@@ -107,7 +138,9 @@ hr.rounded {
     z-index: 10;
 
     /* Black theme */
-    background-color: #000000;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    border-color: var(--button-primary);
     outline: none;
     padding: 6px 10px;
 
@@ -117,16 +150,17 @@ hr.rounded {
 }
 
 .multiple_select option {
+    background-color: var(--bg-primary);
     display: none;
-    background-color: #000000;
     height: 36px;
     padding: 6px 10px;
 }
 
 .multiple_select option:checked { /* does not work!!! */
-    background-color: #1eff29;
-    color: #000000;
+    background-color: var(--border-accent);
+    color: var(--bg-primary);
 }
+
 .multiple_select::before
 {
 	content: var(--text);
@@ -136,10 +170,12 @@ hr.rounded {
     margin-bottom: 2px;
     text-align: center;
 }
+
 .multiple_select_active
 {
 	overflow: visible !important;
 }
+
 .multiple_select_active option
 {
 	display: block;

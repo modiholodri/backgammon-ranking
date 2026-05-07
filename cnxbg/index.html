@@ -12,8 +12,15 @@
     <div class="container">
         <h1 id="webPageTitle">Backgammon</h1>
 
+        <!-- Submission Status -->
+        <section id="submissionStatusSection">
+            <p id="submissionStatus" style="text-align: center; color: gray;"></p>
+            <h6 id="runsInfo"></h6>
+        </section>  
+
         <!-- Match Report -->
-        <div id="matchReportSection">
+        <hr class="rounded">
+        <section id="matchReportSection">
             <h3 id="matchReportFormToggle" type="button" data-toggle="collapse" data-target="#matchReportForm" aria-expanded="true" aria-controls="matchReportForm">
                 Match Report ⇅
             </h3>
@@ -22,24 +29,22 @@
                 <!-- Winner -->
                 <div class="input-group">
                     <span id="winnerLabel" class="input-group-text" style="color: green;">Winner</span>
-                    <select id="winnerName" title="Winner Name" class="form-select" style="flex: 0 0 60%;">
-                        <option value="Select or edit">Select</option>
+                    <select id="winnerName" title="Winner Name" class="form-select">
+                        <option value="Select">Select</option>
                         <option value="Not loaded...">Not loaded...</option>
                     </select>
-                    <input id="winnerNameTyped" title="Winner Name" type="text" class="form-control">
                 </div>
                 <!-- Loser -->
                 <div class="input-group">
                     <span class="input-group-text" style="color: red;">Loser</span>
-                    <select id="loserName" title="Loser Name" class="form-select" style="flex: 0 0 64%;">
-                        <option value="Select or edit">Select</option>
+                    <select id="loserName" title="Loser Name" class="form-select">
+                        <option value="Select">Select</option>
                         <option value="Not loaded...">Not loaded...</option>
                     </select>
-                    <input id="loserNameTyped" title="Loser Name" type="text" class="form-control">
                 </div>
                 <!-- Match Length -->
                 <div class="input-group">
-                    <span class="input-group-text" style="color: gray;">Match Length</span>
+                    <span class="input-group-text">Match Length</span>
                     <select id="matchLength" title="Match Length" class="form-select">
                         <option class="centered" value="1">1</option>
                         <option class="centered" value="3">3</option>
@@ -51,22 +56,14 @@
                         <option class="centered" value="15">15</option>
                         <option class="centered" value="17">17</option>
                     </select>
-                    <input id="matchLengthTyped" title="Match Length" type="text" class="form-control" value="">
                     <button id="submit" type="submit" class="btn btn-primary float-right">Submit</button>
                 </div>
-                <!-- Submission Status -->
-                <h5 id="updateSubmissionStatus" type="button">Submission Status ⟳</h5>
-                <div id="statuses">
-                    <p id="submissionStatus" style="text-align: center; color: gray;"></p>
-                    <h5 id="runsInfo"></h5>
-                </div>
             </form>
-        </div>
-
+        </section>
 
         <!-- Tournament Management -->
-        <div id="tournamentManagementSection">
-            <hr class="rounded">
+        <hr class="rounded">
+        <section id="tournamentManagementSection">
             <h3 id="tournamentManagementToggle" type="button" data-toggle="collapse" data-target="#tournamentManagement" aria-expanded="true" aria-controls="tournamentManagement">
                 Tournament ⇅
             </h3>
@@ -78,11 +75,12 @@
                 <div class="d-flex justify-content-center gap-4">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="showPastMatches" onchange="beautifyTournament()">
-                        <label class="form-check-label" for="showPastMatches" style="color: gray;">Past</label>
+                        <label class="form-check-label" for="showPastMatches">Past 🖤</label>
                     </div>
+                    <label class="form-check-label" for="currentMatches"> Current 🎲</label>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="showFutureMatches" onchange="beautifyTournament()">
-                        <label class="form-check-label" for="showFutureMatches" style="color: gray;">Future</label>
+                        <label class="form-check-label" for="showFutureMatches"> Future 💤</label>
                     </div>
                 </div>
 
@@ -92,189 +90,211 @@
                 </h5>
                 <div id="tournamentDirector" class="collapse">
                     <div class="input-group">
-                        <span class="input-group-text" style="color: gray;">Type</span>
+                        <span class="input-group-text">Type</span>
                         <select id="tournamentType" title="Tournament Type" class="form-select">
                             <option class="centered" value="Double Elimination">Double Elimination</option>
                             <option class="centered" value="Add Last Chance">Add Last Chance</option>
                             <option class="centered" value="Round Robin">Round Robin</option>
+                            <option class="centered" value="Rigid Robin">Rigid Robin</option>
                             <option class="centered" value="Siam Style">Siam Style</option>
                             <option class="centered" value="Single Elimination">Single Elimination</option>
                             <option class="centered" value="Consulting Double">Consulting Double</option>
                         </select>
-                        <button id="autoModeButton" type="button" class="btn btn-secondary" style="display:none;" title="Auto/Fake Button">Fake</button>
                     </div>
                     <div class="input-group">
                         <button id="generateTournamentButton" type="button" title="Generate Tournament" class="btn btn-primary">Generate</button>
                         <input id="debugMode" type="text" title="Debug Mode" class="form-control centered">
                         <button id="startTournamentButton" type="submit" title="Start Tournament" class="btn btn-primary float-right">Start</button>
                         <button id="finishTournamentButton" type="button" title = "Finish Tournament" class="btn btn-primary float-right">Finish</button>
+                        <button id="autoModeButton" type="button" class="btn btn-secondary" style="display:none;" title="Auto/Fake Button">Fake</button>
 
                         <div class="input-group w-100 mt-2">
-                            <span class="input-group-text" id="tournamentPlayersLabel" style="color: gray;">Tournament Players</span>
+                            <span class="input-group-text" id="tournamentPlayersLabel">Tournament Players</span>
                             <select id="playersList" title="Players List" class="multiple_select" multiple aria-describedby="tournamentPlayersLabel">
                                 <option value="Not loaded...">Not loaded...</option>
                             </select>
                         </div>
 
                         <div class="input-group w-100 mt-2">
-                            <span class="input-group-text" id="maximumTournamentPlayersLabel" style="color: gray;">Maximum Tournament Players</span>
+                            <span class="input-group-text" id="maximumTournamentPlayersLabel">Maximum Tournament Players</span>
                             <input id="maximumTournamentPlayers" type="text" title="Maximum Tournament Players" class="form-control centered" aria-describedby="maximumTournamentPlayersLabel">
                         </div>
                         <div class="input-group w-100 mt-2">
-                            <span class="input-group-text" id="matchLengthsLabel" style="color: gray;">Match Lengths</span>
+                            <span class="input-group-text" id="matchLengthsLabel">Match Lengths</span>
                             <input id="matchLengths" value="5 5 5 5 5" type="text" title="Match Lengths" class="form-control centered" aria-describedby="matchLengthsLabel">
                         </div>
                         <div class="input-group w-100 mt-2">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="forfeitSubmittedMatches">
-                                <label class="form-check-label" for="forfeitSubmittedMatches" style="color: gray;">Forfeit Submitted Matches</label>
+                                <label class="form-check-label" for="forfeitSubmittedMatches">Forfeit Submitted Matches</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
-        </div>
+        </section>
 
         <!-- Rating List -->
         <hr class="rounded">
-        <h3 id="ratingListToggle" type="button" data-toggle="collapse" data-target="#ratingList" aria-expanded="true" aria-controls="ratingList">
-            Rating List ⇅
-        </h3>
-        <div id="ratingList" class="collapse"></div>
+        <section id="ratingListSection">
+            <h3 id="ratingListToggle" type="button" data-toggle="collapse" data-target="#ratingList" aria-expanded="true" aria-controls="ratingList">
+                Rating List ⇅
+            </h3>
+            <div id="ratingList" class="collapse"></div>
+        </section>
 
 
         <!-- Ranking Lists -->
         <hr class="rounded">
-        <h3 id="rankingListsToggle" type="button" data-toggle="collapse" data-target="#rankingLists" aria-expanded="false" aria-controls="rankingLists">
-            Ranking Lists ⇅
-        </h3>
-        <div id="rankingLists" class="collapse">
+        <section id="rankingListsSection">
+            <h3 id="rankingListsToggle" type="button" data-toggle="collapse" data-target="#rankingLists" aria-expanded="false" aria-controls="rankingLists">
+                Ranking Lists ⇅
+            </h3>
+            <div id="rankingLists" class="collapse">
 
-            <!-- Ranking List Selection -->
-            <div class="input-group">
-                <select id="rankingListSelection" title="Ranking List Selection" class="form-select" onchange="rankingListSelectionManuallyChanged()">
-                    <option class="centered" value="ratingList">Rating List</option>
-                    <option class="centered" value="winningPercent">Winning %</option>
-                    <option class="centered" value="rangliste">Rangliste</option>
-                    <option class="centered" value="playerProgress">Player Progress</option>
-                    <option class="centered" value="playerPosition">Player Position</option>
-                    <option class="centered" value="currentScores">Current Scores</option>
-                    <option class="centered" value="highScores">High Scores</option>
-                    <option class="centered" value="lowScores">Low Scores</option>
-                    <option class="centered" value="matchesPlayed">Matches Played</option>
-                    <option class="centered" value="percentMatchesWon">% Matches Won</option>
-                    <option class="centered" value="playerInfoPercent">Player Info %</option>
-                    <option class="centered" value="playerInfoMatches">Player Info</option>
-                    <option class="centered" value="currentStreak">Current Streak</option>
-                    <option class="centered" value="longestWinningStreak">> Winning Streak</option>
-                    <option class="centered" value="longestLosingStreak">> Losing Streak</option>
-                    <option class="centered" value="daysInactive">Days Inactive</option>
-                </select>
+                <!-- Ranking List Selection -->
+                <div class="input-group">
+                    <select id="rankingListSelection" title="Ranking List Selection" class="form-select" onchange="rankingListSelectionManuallyChanged()">
+                        <option class="centered" value="ratingList">Rating List</option>
+                        <option class="centered" value="winningPercent">Winning %</option>
+                        <option class="centered" value="rangliste">Rangliste</option>
+                        <option class="centered" value="playerProgress">Player Progress</option>
+                        <option class="centered" value="playerPosition">Player Position</option>
+                        <option class="centered" value="currentScores">Current Scores</option>
+                        <option class="centered" value="highScores">High Scores</option>
+                        <option class="centered" value="lowScores">Low Scores</option>
+                        <option class="centered" value="matchesPlayed">Matches Played</option>
+                        <option class="centered" value="percentMatchesWon">% Matches Won</option>
+                        <option class="centered" value="playerInfoPercent">Player Info %</option>
+                        <option class="centered" value="playerInfoMatches">Player Info</option>
+                        <option class="centered" value="currentStreak">Current Streak</option>
+                        <option class="centered" value="longestWinningStreak">> Winning Streak</option>
+                        <option class="centered" value="longestLosingStreak">> Losing Streak</option>
+                        <option class="centered" value="daysInactive">Days Inactive</option>
+                    </select>
+                </div>
+
+                <!-- Player Name -->
+                <div id="playerNameSelection" class="input-group" style="display:none">
+                    <select id="playerName" title="Player Name" class="form-select" onchange="playerSelectionChanged()">
+                        <option value="Select">Select</option>
+                    </select>
+                </div>
+
+                <!-- Played Time Span -->
+                <div class="input-group">
+                    <select id="intervalSelection" title="Interval Selection" class="form-select" style="flex: 0 0 40%;" onchange="intervalSelectionChanged()">
+                        <option class="centered" value="Daily">Daily</option>
+                        <option class="centered" value="Monthly">Monthly</option>
+                        <option class="centered" value="Quarterly">Quarterly</option>
+                        <option class="centered" value="Yearly">Yearly</option>
+                        <option class="centered" value="ET">ET</option>
+                    </select>
+                    <select id="timeSpanSelection" title="Played Time Span Selection" class="form-select" style="flex: 0 0 60%;" onchange="playedTimeSpanSelectionChanged()">
+                        <option class="centered" value="Not yet set...">Not yet set...</option>
+                    </select>
+                </div>
+
+                <!-- Replay Section -->
+                <div id="replaySection" title="Replay Section" class="input-group">
+                    <span class="input-group-text">Replay</span>
+                    <select id="replayTimes" title="Replay Times" class="form-select">
+                        <option class="centered" value="1">1 x</option>
+                        <option class="centered" value="10">10 x</option>
+                        <option class="centered" value="20">20 x</option>
+                        <option class="centered" value="30">30 x</option>
+                        <option class="centered" value="40">40 x</option>
+                        <option class="centered" value="50">50 x</option>
+                        <option class="centered" value="60" selected>60 x</option>
+                    </select>
+                    <button id="replayPlayButton" title="Play Replay" class="btn btn-primary" type="button" onclick="startPlayingRatingList()">▶︎</button>
+                    <button id="replayResetButton" title="Reset Replay" class="btn btn-secondary" type="button" onclick="resetPlayingRatingList()">⏮︎</button>
+                </div>
+                
+                <!-- Ranking Chart -->
+                <h5 id="rankingChartToggle" type="button" data-toggle="collapse" data-target="#rankingChart" aria-expanded="false" aria-controls="rankingChart">
+                    Ranking Chart ⇅
+                </h5>
+                <div id="rankingChart" class="collapse container-fluid">
+                    <canvas id="rankingChartCanvas" style="background-color: black;"></canvas>
+                    <p id="rankingChartMessage" class="centered">Not loaded yet...</p>
+                </div>
+
+                <!-- Ranking Summary -->
+                <h5 id="rankingSummaryToggle" type="button" data-toggle="collapse" data-target="#rankingSummary" aria-expanded="false" aria-controls="rankingSummary">
+                    Ranking Summary ⇅
+                </h5>
+                <div id="rankingSummary" class="collapse"></div>
+
+                <!-- Match List -->
+                <h5 id="matchListToggle" type="button" data-toggle="collapse" data-target="#matchList" aria-expanded="false" aria-controls="matchList">
+                    Match List ⇅
+                </h5>
+                <div id="matchList" class="collapse"></div>
             </div>
-
-            <!-- Player Name -->
-            <div id="playerNameSelection" class="input-group" style="display:none">
-                <select id="playerName" title="Player Name" class="form-select" onchange="playerSelectionChanged()">
-                    <option value="Select">Select</option>
-                </select>
-            </div>
-
-            <!-- Played Time Span -->
-            <div class="input-group">
-                <select id="intervalSelection" title="Interval Selection" class="form-select" style="flex: 0 0 40%;" onchange="intervalSelectionChanged()">
-                    <option class="centered" value="Daily">Daily</option>
-                    <option class="centered" value="Monthly">Monthly</option>
-                    <option class="centered" value="Quarterly">Quarterly</option>
-                    <option class="centered" value="Yearly">Yearly</option>
-                    <option class="centered" value="ET">ET</option>
-                </select>
-                <select id="timeSpanSelection" title="Played Time Span Selection" class="form-select" style="flex: 0 0 60%;" onchange="playedTimeSpanSelectionChanged()">
-                    <option class="centered" value="Not yet set...">Not yet set...</option>
-                </select>
-            </div>
-
-            <!-- Replay Section -->
-            <div id="replaySection" title="Replay Section" class="input-group">
-                <span class="input-group-text" style="color: gray;">Replay</span>
-                <select id="replayTimes" title="Replay Times" class="form-select">
-                    <option class="centered" value="1">1 x</option>
-                    <option class="centered" value="10">10 x</option>
-                    <option class="centered" value="20">20 x</option>
-                    <option class="centered" value="30">30 x</option>
-                    <option class="centered" value="40">40 x</option>
-                    <option class="centered" value="50">50 x</option>
-                    <option class="centered" value="60" selected>60 x</option>
-                </select>
-                <button id="replayPlayButton" title="Play Replay" class="btn btn-primary" type="button" onclick="startPlayingRatingList()">▶︎</button>
-                <button id="replayResetButton" title="Reset Replay" class="btn btn-secondary" type="button" onclick="resetPlayingRatingList()">⏮︎</button>
-            </div>
-            
-            <!-- Ranking Chart -->
-            <h5 id="rankingChartToggle" type="button" data-toggle="collapse" data-target="#rankingChart" aria-expanded="false" aria-controls="rankingChart">
-                Ranking Chart ⇅
-            </h5>
-            <div id="rankingChart" class="collapse container-fluid">
-                <canvas id="rankingChartCanvas" style="background-color: black;"></canvas>
-                <p id="rankingChartMessage" class="centered">Not loaded yet...</p>
-            </div>
-
-            <!-- Ranking Summary -->
-            <h5 id="rankingSummaryToggle" type="button" data-toggle="collapse" data-target="#rankingSummary" aria-expanded="false" aria-controls="rankingSummary">
-                Ranking Summary ⇅
-            </h5>
-            <div id="rankingSummary" class="collapse"></div>
-
-            <!-- Match List -->
-            <h5 id="matchListToggle" type="button" data-toggle="collapse" data-target="#matchList" aria-expanded="false" aria-controls="matchList">
-                Match List ⇅
-            </h5>
-            <div id="matchList" class="collapse"></div>
-        
-        </div>
+        </section>
 
 
         <!-- Read Me -->
         <hr class="rounded">
-        <h3 id="readMeToggle" type="button" data-toggle="collapse" data-target="#readMe" aria-expanded="false" aria-controls="readMe">
-            Read Me! ⇅
-        </h3>
-        <div id="readMe" class="collapse">
-            <div id="reportingGuidelines">
-                <h3>Connection Issue</h3>
-                <p>If you can see this you might have internet connection issues or your access token might be expired.</p>
+        <section id="readMeSection">
+            <h3 id="readMeToggle" type="button" data-toggle="collapse" data-target="#readMe" aria-expanded="false" aria-controls="readMe">
+                Read Me! ⇅
+            </h3>
+            <div id="readMe" class="collapse">
+                <div id="reportingGuidelines">
+                    <h3>Connection Issue</h3>
+                    <p>Not loaded yet. If you can see this you might have internet connection issues.</p>
+                </div>
+                <div id="reportMatchOnTheWeb"></div>
             </div>
-            <div id="reportMatchOnTheWeb"></div>
-        </div>
+        </section>
 
         
         <!-- Settings -->
         <hr class="rounded">
-        <div class="container">
+        <section id="settingsSection" class="container">
             <h3 id="settingsToggle" type="button" data-toggle="collapse" data-target="#settings" aria-expanded="false" aria-controls="settings">
                 ⚙ Settings ⇅
             </h3>
-            <!-- You Name -->
             <div id="settings" class="collapse">
+                <!-- Your Name -->
                 <div class="input-group">
-                    <span class="input-group-text" style="color: gray;">Your Name</span>
+                    <span class="input-group-text">Your Name</span>
                     <label for="yourName"></label><input id="yourName" type="text" class="form-control centered" placeholder="Enter your name">
                 </div>
                 <!-- Club Selection -->
                 <div class="input-group">
-                    <span class="input-group-text" style="color: gray;">Club</span>
+                    <span class="input-group-text">Club</span>
                     <select id="clubSelection" title="Backgammon Club Selection" class="form-select" onchange="clubSelectionChanged()">
-                        <option class="centered" value="GitHub-Actions">Fake Backgammon</option>
+                        <option class="centered" value="fakbg-ranking-list">Fake Backgammon</option>
                     </select>
+                </div>
+                <!-- Theme Selection -->
+                <div class="input-group">
+                    <span class="input-group-text">Theme</span>
+                    <select id="themeSelection" title="Theme Selection" class="form-select" onchange="themeSelectionChanged()">
+                        <option class="centered" value="system-theme">System Default</option>
+                        <option class="centered" value="dark-theme">Dark</option>
+                        <option class="centered" value="light-theme">Light</option>
+                    </select>
+                </div>
+                <div class="input-group w-100 mt-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="autoCollapseSections">
+                        <label class="form-check-label" for="autoCollapseSections">Auto Collapse Sections</label>
+                    </div>
                 </div>
                 <p class="mt-3" style="color: gray;">Note: The settings are saved locally on your device. 
                                 They will be loaded automatically the next time you visit the page.
                                 Refresh the page after making changes.</p>
             </div>
-        </div>
+        </section>
 
-
+        <!-- Footer -->
+        <hr class="rounded">
         <footer class="text-center mt-4 mb-2" style="color: gray;">
-            <small>2026-04-15 &copy; Modiholodri</small>
+            <small>2026-05-07 &copy; Modiholodri</small>
         </footer>
     </div>
 
@@ -411,7 +431,8 @@
                             playerProgressCalculated = true;
                         }
                         updatePlayerPositionChart(playerProgressList);
-                        // createPlayerProgressList('rankingSummary', playerProgressList);
+                        // set the ranking summary same same rating list
+                        document.getElementById('rankingSummary').innerHTML = document.getElementById('ratingList').innerHTML;
                     }
                     break;
                 case 'currentScores':
@@ -479,6 +500,8 @@
                 document.getElementById('tournamentManagementSection').style.display = 'block';
             }
 
+            playerProgressCalculated = false;
+
             fetchRatingList();
             fetchMatchList();
             clearSubmissionStatus();
@@ -532,83 +555,6 @@
     
     <!-- Events -->
     <script>
-        // Auto-refresh when #debugMode contains "Auto" (case-insensitive, substring match)
-        let autoRefreshIntervalId = null;
-
-        function updateAutoRefresh() {
-            const debugInput = document.getElementById('debugMode');
-            if (!debugInput) return;
-
-            const isAuto = debugInput.value && debugInput.value.toString().toLowerCase().includes('auto');
-
-            if (isAuto && autoRefreshIntervalId === null) {
-                // start refreshing every 17 seconds
-                autoRefreshIntervalId = setInterval(() => {
-                    try { 
-                        displayAutoRefreshCountdown(); // Call the countdown function here
-                        function displayAutoRefreshCountdown() {
-                            const debugInput = document.getElementById('debugMode');
-                            if (!debugInput) return;
-
-                            const countdownElement = document.getElementById('autoModeButton') || createCountdownElement();
-                            countdownElement.style.display = '';
-                            let countdown = 17;
-                            const countdownInterval = setInterval(() => {
-                                countdown--;
-                                countdownElement.textContent = `in ${-countdown}s`;
-                                
-                                if (countdown <= 0) {
-                                    clearInterval(countdownInterval);
-                                    countdown = 17;
-                                    // do the actual refreshing
-                                    countdownElement.textContent = `Refreshing`;
-                                    fetchMatchList();
-                                    getTodaysMatches(matchRecords);
-                                    highlightTodaysMatches();
-                                    beautifyTournament();
-                                }
-                            }, 1000);
-                        }
-
-                        function createCountdownElement() {
-                            const element = document.createElement('div');
-                            element.id = 'autoRefreshCountdown';
-                            element.style.cssText = 'position: fixed; top: 10px; right: 10px; padding: 10px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 5px; font-size: 12px;';
-                            document.body.appendChild(element);
-                            return element;
-                        }
-
-                        // location.reload(); 
-                    } 
-                    catch (e) { 
-                        /* ignore */ 
-                    }
-                }, 17000);
-            } else if (!isAuto && autoRefreshIntervalId !== null) {
-                // stop auto-refresh
-                clearInterval(autoRefreshIntervalId);
-                autoRefreshIntervalId = null;
-            }
-        }
-
-        // Wire up listeners on the debug input to toggle auto-refresh immediately on change
-        const debugInputElement = document.getElementById('debugMode');
-        if (debugInputElement) {
-            debugInputElement.addEventListener('input', updateAutoRefresh);
-            debugInputElement.addEventListener('change', updateAutoRefresh);
-            // initialize based on current value
-            updateAutoRefresh();
-        }
-
-        // Ensure interval is cleared when navigating away
-        window.addEventListener('beforeunload', () => {
-            if (autoRefreshIntervalId !== null) {
-                clearInterval(autoRefreshIntervalId);
-                autoRefreshIntervalId = null;
-            }
-        });
-
-
         // Add DOM Content Loaded Event Listener
         document.addEventListener("DOMContentLoaded", () => {
             populateClubSelection(); // has to be done first so that the settings can be loaded correctly
@@ -639,37 +585,61 @@
             })();
         });
 
+        // Auto-collapse other sections when one section is shown
+        function autoCollapse(elementName) {
+            if (!document.getElementById('autoCollapseSections').checked) return;
+
+            switch (elementName) {
+                case 'matchReportForm':
+                    collapseElements(['ratingList', 'rankingLists', 'readMe', 'settings']);
+                    break;
+                case 'tournamentManagement':
+                    collapseElements(['matchReportForm', 'ratingList', 'rankingLists', 'readMe', 'settings']);
+                    break;
+                case 'ratingList':
+                    collapseElements(['matchReportForm', 'tournamentManagement', 'rankingLists', 'readMe', 'settings']);
+                    break;
+                case 'rankingLists':
+                    collapseElements(['matchReportForm', 'tournamentManagement', 'ratingList', 'readMe', 'settings']);
+                    break;
+                case 'readMe':
+                    collapseElements(['matchReportForm', 'tournamentManagement', 'ratingList', 'rankingLists', 'settings']);
+                    break;
+                case 'settings':
+                    collapseElements(['matchReportForm', 'tournamentManagement', 'ratingList', 'rankingLists', 'readMe']);
+                    break;
+            }
+        }
+
+        function collapseElement(elementName) {
+            const element = document.getElementById(elementName);
+            if (element) element.classList.remove('show');
+        }
+
+        function collapseElements(elements) {
+            if (!Array.isArray(elements)) return;
+            elements.forEach(collapseElement);
+        }
+
+        function showElement(elementName) {
+            const element = document.getElementById(elementName);
+            if (element) element.classList.add('show');
+        }
+
+        // Add click event listeners to all toggle elements, so that the sections can be shown/hidden
         function addToggleListener(elementName) {
             document.getElementById(elementName + 'Toggle').addEventListener('click', function() {
                 const collapseElement = document.getElementById(elementName);
                 collapseElement.classList.toggle('show');
+                const elementJustShown = collapseElement.classList.contains('show');
+                if (elementJustShown) {
+                    autoCollapse(elementName);
+                }
                 
                 if (elementName === 'rankingChart') {  // refresh the ranking chart if it is made visible
                     const rankingCharJustShown = document.getElementById(elementName).classList.contains('show');
                     if (rankingCharJustShown) {
-                        switch ( document.getElementById('rankingListSelection').value) {
-                            case 'matchesPlayed':
-                            case 'percentMatchesWon': 
-                                updateMatchesPlayedChart(rankingSummary);
-                                break;
-                            case 'rangliste':
-                                updateRanglistenChart(ranglistenSummary);
-                                break;
-                            case 'ratingList':
-                                updateRatingListChart(ratingSummary);
-                                break;
-                            case 'winningPercent':
-                                updateWinningPercentChart(ratingSummary);
-                                break;
-                            case 'playerInfoPercent':
-                                updatePlayerInfoPercentChart(playerSummary);
-                                break;
-                            case 'playerInfoMatches':
-                                updatePlayerInfoMatchesChart(playerSummary);
-                                break;
-                            default:
-                                break;
-                        }
+                        rankingListSelectionManuallyChanged();
                     }
                 }
             });
@@ -693,8 +663,8 @@
         addToggleListener('rankingChart');
         addToggleListener('rankingSummary');
         addToggleListener('matchList');
-        addToggleListener('settings'); 
         addToggleListener('readMe');
+        addToggleListener('settings'); 
     </script>
         
     <script src="ClubRepo.js"></script>

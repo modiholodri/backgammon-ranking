@@ -23,6 +23,9 @@ function generateTournament(selectedPlayers) {
         case 'Round Robin':
             generateRoundRobins(selectedPlayers);
             break;
+        case 'Rigid Robin':
+            generateRigidRobins(selectedPlayers);
+            break;
         case 'Single Elimination':
             generateSingleElimination(selectedPlayers);
             break;
@@ -49,16 +52,17 @@ function generateTournament(selectedPlayers) {
 
 function tournamentInfo() {
     const today = new Date().toISOString().slice(0, 10);
-    const byTournamentDirector = 'by ' + document.getElementById('yourName').value.trim();
-    return `<p id="today" style="text-align: center; color: gray;">${today} ${byTournamentDirector}</p>\n`;
+    const tournamentDirector = document.getElementById('yourName').value.trim() || 'Anonymous';
+    return `<p id="today" style="text-align: center; color: gray;">${today} by ${tournamentDirector}</p>\n`;
 }
 
 function generateConsultingDouble(selectedPlayers) {
     const rounds = [];
     const players = fisherYatesShuffle(selectedPlayers);
     const length = document.getElementById('matchLengths').value.split(/\s+/)[0] || '5';
-    if (players.length % 2 !== 0) {
-        players.push('Bye');
+    if (players.length % 4 !== 0) {
+        alert('Invalid number of players for Consulting Double!\nMust be a multiple of 4.');
+        return;
     }
 
     const numTeams = players.length / 2;
@@ -442,6 +446,91 @@ function generateRoundRobinTournament(groupName, selectedPlayers, length) {
     return html;
 }
 
+function generateRigidRobins(selectedPlayers) {
+    let maximumPlayers = document.getElementById('maximumTournamentPlayers').value;
+    if (isNaN(maximumPlayers) || maximumPlayers < 3) {
+        alert('Invalid maximum players per group!\nNot a number or less than 3.');
+        return;
+    }
+
+    let html = tournamentInfo();
+    
+    const players = fisherYatesShuffle(selectedPlayers);
+    let tournamentPlayer = players.length;
+
+    let groups = Math.floor(tournamentPlayer / maximumPlayers);
+    if (groups * maximumPlayers < tournamentPlayer) groups += 1;
+
+    let groupPlayers = Math.ceil(tournamentPlayer / groups);
+
+    const matchLengths = getMatchLengths();
+
+    let start = 0;
+    let remainingPlayers = tournamentPlayer;
+    let remainingGroups = groups;
+    for (let group = 1; group < groups + 1; group++) {
+        let end = start + groupPlayers;
+        if (group === groups) end = tournamentPlayer + 1; 
+        const idx = group - 1;
+        const length = matchLengths[idx] !== undefined ? matchLengths[idx] : '';
+        html += generateRigidRobinTournament(group, players.slice(start, end), length);
+
+        start += groupPlayers;
+
+        remainingPlayers -= groupPlayers;
+        remainingGroups -= 1;
+        groupPlayers = Math.ceil(remainingPlayers / remainingGroups);
+    }
+
+    setTournamentData(html);
+    tournamentGenerated = true;
+}
+
+function generateRigidRobinTournament(groupName, selectedPlayers, length) {
+    const rounds = [];
+    const players = fisherYatesShuffle(selectedPlayers);
+    let haveBye = false;
+    if (players.length % 2 !== 0) {
+        players.push('Bye');
+        haveBye = true;
+    }
+    const numRounds = players.length - 1;
+    const half = players.length / 2;
+
+    for (let round = 0; round < numRounds; round++) {
+        const firstRound = round === 0; // sleeping or not, that's the question
+        const matches = [];
+        for (let i = 0; i < half; i++) {
+            const home = players[i];
+            const away = players[players.length - 1 - i];
+            if (firstRound) {
+                matches.push(`${home} # - # ${away}`);
+            }
+            else {
+                const homePlayer = home === 'Bye' ? 'Bye' : haveBye ? `${home}` : `*${home}*`;  // tricky stuff to assign the first bye
+                haveBye = false; // only assign the first bye, the rest should be treated as normal players
+                const awayPlayer = away === 'Bye' ? 'Bye' : haveBye ? `${away}` : `*${away}*`;
+                matches.push(`${homePlayer} _ - _ ${awayPlayer}`);
+            }
+        }
+        rounds.push(matches);
+        // Rotate players except the first one
+        players.splice(1, 0, players.pop());
+    }
+
+    // generate the HTML for the tournament
+    let html = `<h5>Round Robin ${groupName} - ${length} points</h5>\n`;
+    rounds.forEach((matches) => {
+        html += `<p>\n`;
+        matches.forEach(match => {
+            html += `${match}<br>\n`;
+        });
+        html += `</p>\n`;
+    });
+
+    return html;
+}
+
 function generateWinsSortedTable(winCounts, lossCounts, eloPoints) {
     // Convert to array and sort by wins descending
     const sorted = Object.entries(winCounts).sort((a, b) => {
@@ -727,11 +816,35 @@ function highlightTodaysMatches() {
                     continue; // skip HTML tags - info and completed matches
                 }
                 
-                if (tournamentLines[j].match(roundRobinMatchRegex)) { // Round Robin match
+                if (tournamentLines[j].match(roundRobinMatchRegex)) { // Round/Rigid Robin match
                     tournamentLines[j] = tournamentLines[j].replace(
                         roundRobinMatchRegex,
                         `<span style="color: green;">${winner}</span> &lt; ${matchLength} &gt; <span style="color: red;">${loser}</span><br>`
                     );
+
+                    // Replace Loser and Winner references in the rest of the tournament
+                    const winnerRegex = new RegExp(`[*]${winner}[*]`);
+                    const loserRegex = new RegExp(`[*]${loser}[*]`);
+                    let foundWinner = false;
+                    let foundLoser = false;
+                    for (let k = 0; k < tournamentLines.length; k++) { 
+                        if (!tournamentLines[k].includes("Bye") && tournamentLines[k][0] === '<') continue; // skip HTML tags - info and completed matches
+
+                        if (!foundWinner && tournamentLines[k].match(winnerRegex)) {
+                            if (!tournamentLines[k].match(`Bye`)) foundWinner = true; // only count it if it was not a Bye
+                            tournamentLines[k] = tournamentLines[k].replace(winnerRegex, winner);
+                        }
+                        if (!foundLoser && tournamentLines[k].match(loserRegex)) {
+                            if (!tournamentLines[k].match(`Bye`)) foundLoser = true; // only count it if it was not a Bye
+                            tournamentLines[k] = tournamentLines[k].replace(loserRegex, loser);
+                        }
+                        if (!tournamentLines[k].includes("*")) { // replace future matches with current matches if there is no placeholder
+                            tournamentLines[k] = tournamentLines[k].replace(/_/g, '#');
+                        }
+
+                        if (foundWinner && foundLoser) break;
+                    }
+
                     break; // Exit the inner loop once a match is found and replaced
                 }
                 else if (tournamentLines[j].match(doubleEliminationMatchRegex)) { // Double Elimination match
@@ -810,34 +923,39 @@ function highlightTodaysMatches() {
     tournamentData = tournamentLines.join('\n');
 }
 
+// Resolve the Byes in the tournament and update the tournament data accordingly
 function resolveByes() {
+    const tournamentType = document.getElementById('tournamentType').value;
+    const isNotRigidRobin = tournamentType !== 'Rigid Robin';
+
     const tournamentLines = tournamentData.split('\n');
     // fix the Byes
-    const doubleEliminationMatchRegex = new RegExp(`^(.+) [#_] (\\d+) [#_] (.+)\\b`, 'i');
+    const doubleEliminationMatchRegex = new RegExp(`^(.+) [#_] ((\\d+)|-) [#_] (.+)<br>`, 'i');
     for (let j = 0; j < tournamentLines.length; j++) {
         if (tournamentLines[j].includes('Bye')) {
+            const byeMatch = tournamentLines[j];
             if (tournamentLines[j].match(doubleEliminationMatchRegex)) {
                 const playerA = tournamentLines[j].match(doubleEliminationMatchRegex)[1]; // Get player A
                 const matchNumber = tournamentLines[j].match(doubleEliminationMatchRegex)[2]; // Get the match number
-                let playerB = tournamentLines[j].match(doubleEliminationMatchRegex)[3]; // Get player B
-                
-                playerB = playerB.slice(0, -3);  // TODO: fix this hack to remove <br
+                let playerB = tournamentLines[j].match(doubleEliminationMatchRegex)[4]; // Get player B
                 
                 const winner = playerA === 'Bye' ? playerB : playerA;
                 const loser = 'Bye';
 
                 tournamentLines[j] = tournamentLines[j].replace(
                     doubleEliminationMatchRegex,
-                    `<span style="color: green;">${winner}</span> &lt; 0 &gt; <span style="color: gray;">${loser}</span><br`
+                    `<span style="color: gray;">${winner}</span> &lt; 0 &gt; <span style="color: gray;">${loser}</span><br>`
                 );
+
 
                 const winnerRegex = new RegExp(`~W${matchNumber}~`, 'g');
                 const loserRegex = new RegExp(`~L${matchNumber}~`, 'g');
                 for (let k = 0; k < tournamentLines.length; k++) { 
                     tournamentLines[k] = tournamentLines[k].replace(winnerRegex, winner);
                     tournamentLines[k] = tournamentLines[k].replace(loserRegex, loser);
-                    if (!tournamentLines[k].includes("~")) { // replace future matches with current matches if there is no placeholder
-                        tournamentLines[k] = tournamentLines[k].replace(/_/g, '#');
+                    if (isNotRigidRobin && !tournamentLines[k].includes("~")) { // replace future matches with current matches if there is no placeholder
+                        tournamentLines[k] = tournamentLines[k].replace(/_/g, '#'); 
+                        // ToDo not sure if it is needed at all
                     }
                 }
             }
@@ -955,12 +1073,13 @@ function make16PlayersDoubleElimination() {
 function extractFirstActiveMatchPlayers() {
     const tournamentLines = tournamentData.split('\n');
 //    const combinedMatchRegex = /(\w+)\s*#\s*(?:-|\d+)\s*#\s*(\w+)/i;
-    const combinedMatchRegex = /(\w+)\s*#[ A-Z]*(?:-|\d+)[ A-Z]*#\s*(\w+)/i;
+//    const combinedMatchRegex = /(\w+)\s*#[ A-Za-z]*(?:-|\d+)[ A-Za-z]*#\s*(\w+)/i;
+    const combinedMatchRegex = /^([^#]+)\s*#[ A-Z](?:-|\d+)[ A-Z]#\s*([^#]+)<br>/i; // don;t understand that one but it works better than the others for some reason, maybe because it captures the whole player name with spaces and special characters instead of just the first word?
 
     for (let line of tournamentLines) {
         if (line.match(combinedMatchRegex)) {
             const players = line.match(combinedMatchRegex);
-            return { player1: players[1], player2: players[2] };
+            return { player1: players[1].trim(), player2: players[2].trim() };
         } 
     }
     return null; // No active matches found
@@ -1000,7 +1119,7 @@ function autoMode() {
             const dateString = datetime.toISOString().split('T')[0];
             const autoMatch = `|${dateString}|${winnerName}|${loserName}|${matchLength}|`;
 
-            setSubmissionStatus(`Auto match...\n ${autoMatch}`);
+            setSubmissionStatus(`Auto ${autoMatch}`);
             matchRecords.push(autoMatch);
 
             getTodaysMatches(matchRecords);
@@ -1024,7 +1143,8 @@ function autoMode() {
         }
 
         // increment simple counter and update the button text
-        const count = (parseInt(btn.dataset.counter, 10) || 0) + 1;
+        const currentCounter = parseInt(btn.dataset.counter, 10);
+        const count = Number.isFinite(currentCounter) ? Math.max(0, currentCounter) + 1 : 1;
         btn.dataset.counter = count.toString();
         btn.textContent = count.toString();
     } catch (err) {
@@ -1045,6 +1165,7 @@ if (autoModeButton) {
             // stop auto mode
             clearInterval(autoModeIntervalId);
             autoModeIntervalId = null;
+            autoModeButton.dataset.counter = '0';
             autoModeButton.dataset.autostate = 'off';
             autoModeButton.classList.remove('active');
         }
@@ -1104,7 +1225,7 @@ async function uploadTournament() {
                 'Accept': 'application/vnd.github.v3+json',
             },
             body: JSON.stringify({ 
-                event_type: 'start_tournament', 
+                event_type: 'upload_tournament', 
                 client_payload: { 
                     tournament_html: `${tournamentData}`,
                 } 

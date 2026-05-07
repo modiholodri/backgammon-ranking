@@ -6,7 +6,7 @@ window.addEventListener('beforeunload', saveSettings);
 
 // load the toggle settings of a specific toggle element
 function loadToggleSetting(elementName) {
-    const toggleState = localStorage.getItem(elementName + 'State') || 'expanded';
+    const toggleState = localStorage.getItem(elementName + 'State') || 'collapsed';
     const element = document.getElementById(elementName);
     toggleState === 'expanded' ? element.classList.add('show') : element.classList.remove('show');
 }
@@ -76,6 +76,12 @@ function loadSettings() {
         document.getElementById('matchReportSection').style.display = 'none';
         document.getElementById('tournamentManagementSection').style.display = 'none';
     }
+
+    // Theme Selection
+    loadValueSetting('themeSelection', 'system-theme');
+    themeSelectionChanged();
+
+    loadCheckedSetting('autoCollapseSections', 'true');
 }
 
 // save the settings of a toggle element to localStorage
@@ -98,8 +104,10 @@ function saveCheckedSetting(elementName) {
 
 // Save settings to localStorage
 function saveSettings() {
+    // Match Report Form
     saveToggleSetting('matchReportForm');
 
+    // Tournament Management
     saveToggleSetting('tournamentManagement');
     saveToggleSetting('tournamentDirector');
 
@@ -117,16 +125,20 @@ function saveSettings() {
         localStorage.setItem('playersListSelection', JSON.stringify(selectedValues));
     }
 
+    // Rating/Ranking List Selection
     saveToggleSetting('ratingList');
     saveToggleSetting('rankingLists');
 
     saveValueSetting('rankingListSelection');
-    saveValueSetting('yourName');
     saveValueSetting('intervalSelection');
 
     saveToggleSetting('rankingChart');
     saveToggleSetting('rankingSummary');
     saveToggleSetting('matchList');
-    
+
+    // Settings
+    saveValueSetting('yourName');
     saveValueSetting('clubSelection');
+    saveValueSetting('themeSelection'); 
+    saveCheckedSetting('autoCollapseSections');
 }

@@ -78,8 +78,10 @@ function loadSettings() {
     }
 
     // Theme Selection
-    loadValueSetting('themeSelection', 'dark-theme');
+    loadValueSetting('themeSelection', 'system-theme');
     themeSelectionChanged();
+
+    loadCheckedSetting('autoCollapseSections', 'true');
 }
 
 // save the settings of a toggle element to localStorage
@@ -137,5 +139,6 @@ function saveSettings() {
     // Settings
     saveValueSetting('yourName');
     saveValueSetting('clubSelection');
-    saveValueSetting('themeSelection');
+    saveValueSetting('themeSelection'); 
+    saveCheckedSetting('autoCollapseSections');
 }

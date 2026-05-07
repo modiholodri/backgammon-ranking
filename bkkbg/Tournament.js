@@ -925,6 +925,9 @@ function highlightTodaysMatches() {
 
 // Resolve the Byes in the tournament and update the tournament data accordingly
 function resolveByes() {
+    const tournamentType = document.getElementById('tournamentType').value;
+    const isNotRigidRobin = tournamentType !== 'Rigid Robin';
+
     const tournamentLines = tournamentData.split('\n');
     // fix the Byes
     const doubleEliminationMatchRegex = new RegExp(`^(.+) [#_] ((\\d+)|-) [#_] (.+)<br>`, 'i');
@@ -950,6 +953,10 @@ function resolveByes() {
                 for (let k = 0; k < tournamentLines.length; k++) { 
                     tournamentLines[k] = tournamentLines[k].replace(winnerRegex, winner);
                     tournamentLines[k] = tournamentLines[k].replace(loserRegex, loser);
+                    if (isNotRigidRobin && !tournamentLines[k].includes("~")) { // replace future matches with current matches if there is no placeholder
+                        tournamentLines[k] = tournamentLines[k].replace(/_/g, '#'); 
+                        // ToDo not sure if it is needed at all
+                    }
                 }
             }
         }

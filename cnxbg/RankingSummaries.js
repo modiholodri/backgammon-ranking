@@ -83,12 +83,14 @@ function createPlayerInfoList(summaryElement, playerSummary, vipPlayerName) {
 
 // Percent Matches Won
 function createPercentMatchesWonRankingList(summaryElement, rankingSummary) {
-    let rankingList = '|   |   |% Won|Result|\n|:---:|:---:|:---:|:---:|\n';
+    let rankingList = '|   |   |% Won|% Exp|Matches|Result|\n|:---:|:---:|:---:|:---:|:---:|:---:|\n';
 
     let rank = 1;
+    const matchLengthRoot = Math.sqrt(5); // Assuming a default match length of 5 for expected win percentage calculation
     for (const [player, stats] of Object.entries(rankingSummary).sort((a,b) => (b[1].matchesWon/b[1].matchesPlayed)-(a[1].matchesWon/a[1].matchesPlayed))) {
         const winPercentage = Math.round(stats.matchesWon*1000/stats.matchesPlayed)/10;
-        rankingList += `|${rank++}|${player}|${winPercentage}|${stats.matchesWon} - ${stats.matchesLost}|\n`;
+        const winningProbability = Math.round(1000 * (1 / (1 + Math.pow(10, -(playerRating[player].rating - 1800) * matchLengthRoot / 2000))))/10;
+        rankingList += `|${rank++}|${player}|${winPercentage}|${winningProbability}|${stats.matchesPlayed}|${stats.matchesWon} - ${stats.matchesLost}|\n`;
     }   
     
     displayListWithHighlighting(summaryElement, rankingList);

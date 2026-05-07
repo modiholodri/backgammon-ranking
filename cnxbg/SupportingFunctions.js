@@ -92,7 +92,7 @@ function highlightYourNameInTable(tableHTML) {
     const regex = new RegExp(`\\b(${yourName})\\b`, 'gi');
     tableHTML = tableHTML.replace(
         regex,
-        `<span style="color: green;"><b>${yourName}</b></span>`
+        `<span style="color: yellow;"><b>${yourName}</b></span>`
     );
     return tableHTML;
 }
@@ -144,7 +144,7 @@ function fetchFrequentPlayers() {
                 if (selected > 0)
                     document_style.setProperty('--text', "'" + selected + " Players Selected...'");
                 else
-                    document_style.setProperty('--text', "'Select Tournament Players...'");
+                    document_style.setProperty('--text', "'Select Players...'");
 
             }
 
@@ -403,5 +403,19 @@ function calculatePlayerRating(matchRecords) {
         playerRating[player].rating = Math.round(playerRating[player].rating);
         playerRating[player].difference = Math.round(playerRating[player].difference * 10) / 10;
     }
+}
+
+//* Theme Handling
+
+// Theme Selection Changed
+function themeSelectionChanged() {
+    let theme = document.getElementById('themeSelection').value;
+
+    if (theme === 'system-theme') { // Check the system theme
+        const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
+        if (isLightMode) theme = 'light-theme';
+        else theme = 'dark-theme';
+    }
+    document.body.classList.toggle('light-theme', theme === 'light-theme');
 }
 
