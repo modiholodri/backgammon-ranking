@@ -639,29 +639,7 @@
                 if (elementName === 'rankingChart') {  // refresh the ranking chart if it is made visible
                     const rankingCharJustShown = document.getElementById(elementName).classList.contains('show');
                     if (rankingCharJustShown) {
-                        switch ( document.getElementById('rankingListSelection').value) {
-                            case 'matchesPlayed':
-                            case 'percentMatchesWon': 
-                                updateMatchesPlayedChart(rankingSummary);
-                                break;
-                            case 'rangliste':
-                                updateRanglistenChart(ranglistenSummary);
-                                break;
-                            case 'ratingList':
-                                updateRatingListChart(ratingSummary);
-                                break;
-                            case 'winningPercent':
-                                updateWinningPercentChart(ratingSummary);
-                                break;
-                            case 'playerInfoPercent':
-                                updatePlayerInfoPercentChart(playerSummary);
-                                break;
-                            case 'playerInfoMatches':
-                                updatePlayerInfoMatchesChart(playerSummary);
-                                break;
-                            default:
-                                break;
-                        }
+                        rankingListSelectionManuallyChanged();
                     }
                 }
             });
