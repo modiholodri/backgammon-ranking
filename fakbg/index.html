@@ -279,6 +279,12 @@
                         <option class="centered" value="light-theme">Light</option>
                     </select>
                 </div>
+                <div class="input-group w-100 mt-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="autoCollapseSections">
+                        <label class="form-check-label" for="autoCollapseSections">Auto Collapse Sections</label>
+                    </div>
+                </div>
                 <p class="mt-3" style="color: gray;">Note: The settings are saved locally on your device. 
                                 They will be loaded automatically the next time you visit the page.
                                 Refresh the page after making changes.</p>
@@ -581,7 +587,8 @@
 
         // Auto-collapse other sections when one section is shown
         function autoCollapse(elementName) {
-            // Other sections: matchReportForm, tournamentManagement, ratingList, rankingLists, readMe, settings
+            if (!document.getElementById('autoCollapseSections').checked) return;
+
             switch (elementName) {
                 case 'matchReportForm':
                     collapseElements(['ratingList', 'rankingLists', 'readMe', 'settings']);
