@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', loadSettings);
 window.addEventListener('beforeunload', saveSettings);
 
 // load the toggle settings of a specific toggle element
-function loadToggleSetting(elementName) {
-    const toggleState = localStorage.getItem(elementName + 'State') || 'collapsed';
+function loadToggleSetting(elementName, defaultState = 'collapsed') {
+    const toggleState = localStorage.getItem(elementName + 'State') || defaultState;
     const element = document.getElementById(elementName);
     toggleState === 'expanded' ? element.classList.add('show') : element.classList.remove('show');
 }
@@ -22,9 +22,9 @@ function loadValueSetting(elementName, defaultValue) {
 
 // Load settings from localStorage
 function loadSettings() {
-    loadToggleSetting('matchReportForm');
+    loadToggleSetting('matchReportForm', 'expanded');
 
-    loadToggleSetting('tournamentManagement');
+    loadToggleSetting('tournamentManagement', 'expanded');
     loadToggleSetting('tournamentDirector');
 
     // Tournament Management
@@ -32,7 +32,7 @@ function loadSettings() {
     loadCheckedSetting('showFutureMatches', 'true');
 
     loadValueSetting('debugMode', '');
-    loadValueSetting('tournamentType', 'Double Elimination');
+    loadValueSetting('tournamentType', 'Round Robin');
     loadValueSetting('maximumTournamentPlayers', '7');
     loadValueSetting('matchLengths', '5 5 5 5 5');
 
@@ -72,7 +72,7 @@ function loadSettings() {
             : '';
     }
     clubSelectionElement.value = clubSelection;
-    if (clubSelection === 'siambg-ranking-list') {
+    if (clubSelection.includes('unitedbg')) {
         document.getElementById('matchReportSection').style.display = 'none';
         document.getElementById('tournamentManagementSection').style.display = 'none';
     }

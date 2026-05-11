@@ -1246,7 +1246,7 @@ async function uploadTournament() {
 // Fetch the last tournament
 function fetchLastTournament() {
     const repoName = document.getElementById('clubSelection').value;
-    if (repoName === 'siambg-ranking-list') return; // Not needed for the Siam Backgammon Merger
+    if (repoName.includes('unitedbg')) return; // Not needed for the United Backgammon Merger
 
     const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/Tournament.html?timestamp=${Date.now()}`;
 

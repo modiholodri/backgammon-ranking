@@ -19,8 +19,8 @@
         </section>  
 
         <!-- Match Report -->
-        <hr class="rounded">
         <section id="matchReportSection">
+            <hr class="rounded">
             <h3 id="matchReportFormToggle" type="button" data-toggle="collapse" data-target="#matchReportForm" aria-expanded="true" aria-controls="matchReportForm">
                 Match Report ⇅
             </h3>
@@ -62,8 +62,8 @@
         </section>
 
         <!-- Tournament Management -->
-        <hr class="rounded">
         <section id="tournamentManagementSection">
+            <hr class="rounded">
             <h3 id="tournamentManagementToggle" type="button" data-toggle="collapse" data-target="#tournamentManagement" aria-expanded="true" aria-controls="tournamentManagement">
                 Tournament ⇅
             </h3>
@@ -92,11 +92,11 @@
                     <div class="input-group">
                         <span class="input-group-text">Type</span>
                         <select id="tournamentType" title="Tournament Type" class="form-select">
-                            <option class="centered" value="Double Elimination">Double Elimination</option>
-                            <option class="centered" value="Add Last Chance">Add Last Chance</option>
                             <option class="centered" value="Round Robin">Round Robin</option>
                             <option class="centered" value="Rigid Robin">Rigid Robin</option>
                             <option class="centered" value="Siam Style">Siam Style</option>
+                            <option class="centered" value="Double Elimination">Double Elimination</option>
+                            <option class="centered" value="Add Last Chance">Add Last Chance</option>
                             <option class="centered" value="Single Elimination">Single Elimination</option>
                             <option class="centered" value="Consulting Double">Consulting Double</option>
                         </select>
@@ -135,8 +135,8 @@
         </section>
 
         <!-- Rating List -->
-        <hr class="rounded">
         <section id="ratingListSection">
+            <hr class="rounded">
             <h3 id="ratingListToggle" type="button" data-toggle="collapse" data-target="#ratingList" aria-expanded="true" aria-controls="ratingList">
                 Rating List ⇅
             </h3>
@@ -145,8 +145,8 @@
 
 
         <!-- Ranking Lists -->
-        <hr class="rounded">
         <section id="rankingListsSection">
+            <hr class="rounded">
             <h3 id="rankingListsToggle" type="button" data-toggle="collapse" data-target="#rankingLists" aria-expanded="false" aria-controls="rankingLists">
                 Ranking Lists ⇅
             </h3>
@@ -236,8 +236,8 @@
 
 
         <!-- Read Me -->
-        <hr class="rounded">
         <section id="readMeSection">
+            <hr class="rounded">
             <h3 id="readMeToggle" type="button" data-toggle="collapse" data-target="#readMe" aria-expanded="false" aria-controls="readMe">
                 Read Me! ⇅
             </h3>
@@ -252,8 +252,8 @@
 
         
         <!-- Settings -->
-        <hr class="rounded">
         <section id="settingsSection" class="container">
+            <hr class="rounded">
             <h3 id="settingsToggle" type="button" data-toggle="collapse" data-target="#settings" aria-expanded="false" aria-controls="settings">
                 ⚙ Settings ⇅
             </h3>
@@ -274,7 +274,7 @@
                 <div class="input-group">
                     <span class="input-group-text">Theme</span>
                     <select id="themeSelection" title="Theme Selection" class="form-select" onchange="themeSelectionChanged()">
-                        <option class="centered" value="system-theme">System Default</option>
+                        <option class="centered" value="system-theme">Follow System</option>
                         <option class="centered" value="dark-theme">Dark</option>
                         <option class="centered" value="light-theme">Light</option>
                     </select>
@@ -294,7 +294,7 @@
         <!-- Footer -->
         <hr class="rounded">
         <footer class="text-center mt-4 mb-2" style="color: gray;">
-            <small>2026-05-07 &copy; Modiholodri</small>
+            <small>2026-05-11 &copy; Modiholodri</small>
         </footer>
     </div>
 
@@ -491,7 +491,7 @@
             refreshWebPageTitle();
 
             const clubSelection = document.getElementById('clubSelection').value;
-            if (clubSelection === 'siambg-ranking-list') {
+            if (clubSelection.includes('unitedbg')) {
                 document.getElementById('matchReportSection').style.display = 'none';
                 document.getElementById('tournamentManagementSection').style.display = 'none';
             }
@@ -555,6 +555,16 @@
     
     <!-- Events -->
     <script>
+        function checkStorageAvailable() {
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                setHtmlStatus('<p style="color: green;">Normal device detected!</p>');
+            } catch (e) {
+                setHtmlStatus('<p style="color: red;">Turn off Block All Cookies in the Safari settings.</p>');
+            }
+        }
+
         // Add DOM Content Loaded Event Listener
         document.addEventListener("DOMContentLoaded", () => {
             populateClubSelection(); // has to be done first so that the settings can be loaded correctly
@@ -583,6 +593,8 @@
                 fetchFrequentPlayers();
                 refreshWebPageTitle();
             })();
+
+            checkStorageAvailable();
         });
 
         // Auto-collapse other sections when one section is shown
@@ -594,7 +606,7 @@
                     collapseElements(['ratingList', 'rankingLists', 'readMe', 'settings']);
                     break;
                 case 'tournamentManagement':
-                    collapseElements(['matchReportForm', 'ratingList', 'rankingLists', 'readMe', 'settings']);
+                    collapseElements(['ratingList', 'rankingLists', 'readMe', 'settings']);
                     break;
                 case 'ratingList':
                     collapseElements(['matchReportForm', 'tournamentManagement', 'rankingLists', 'readMe', 'settings']);

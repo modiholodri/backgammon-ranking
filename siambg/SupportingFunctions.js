@@ -100,7 +100,7 @@ function highlightYourNameInTable(tableHTML) {
 // Fetch the Frequent Players
 function fetchFrequentPlayers() {
     const repoName = document.getElementById('clubSelection').value;
-    if (repoName === 'siambg-ranking-list') return; // Not needed for the Siam Backgammon Merger
+    if (repoName.includes('unitedbg')) return; // Not needed for the United Backgammon Merger
 
     const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/FrequentPlayers.md?timestamp=${Date.now()}`;
 
@@ -219,7 +219,7 @@ function refreshWebPageTitle () {
 // Fetch the Match List
 function fetchMatchList() {
     const repoName = document.getElementById('clubSelection').value;
-    if (repoName === 'siambg-ranking-list') {
+    if (repoName.includes('unitedbg')) { // For the United Backgammon Merger, we fetch all match lists and merge them, so we can not fetch a single MatchList.md
         fetchAllMatchLists();
         return; 
     }
@@ -266,8 +266,8 @@ function fetchAllMatchLists() {
 
     totalMatchList = ""; // reset totalMatchList before fetching
 
-    Promise.all(repoNames.filter(repoName => repoName !== 'siambg-ranking-list').map(repoName => {
-        // filter out the Siam Backgammon repo
+    Promise.all(repoNames.filter(repoName => !repoName.includes('unitedbg')).map(repoName => {
+        // filter out the United Backgammon repo
         const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/MatchList.md?timestamp=${Date.now()}`;
         return fetch(url, {
             headers: {

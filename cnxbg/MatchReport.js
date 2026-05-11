@@ -180,6 +180,11 @@ function setSubmissionStatus (submissionStatus) {
     document.getElementById("submissionStatus").innerText = submissionStatus;
 }
 
+// Set the HTML Status
+function setHtmlStatus (submissionStatus) {
+    document.getElementById("submissionStatus").innerHTML = submissionStatus;
+}
+
 // Convert a string to Title Case
 function toTitleCase(str) {
     return str.replace(
