@@ -555,6 +555,16 @@
     
     <!-- Events -->
     <script>
+        function checkStorageAvailable() {
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                setHtmlStatus('<p style="color: green;">Normal device detected!</p>');
+            } catch (e) {
+                setHtmlStatus('<p style="color: red;">Turn off Block All Cookies in the Safari settings.</p>');
+            }
+        }
+
         // Add DOM Content Loaded Event Listener
         document.addEventListener("DOMContentLoaded", () => {
             populateClubSelection(); // has to be done first so that the settings can be loaded correctly
@@ -583,6 +593,8 @@
                 fetchFrequentPlayers();
                 refreshWebPageTitle();
             })();
+
+            checkStorageAvailable();
         });
 
         // Auto-collapse other sections when one section is shown
