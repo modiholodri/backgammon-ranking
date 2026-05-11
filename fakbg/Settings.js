@@ -32,7 +32,7 @@ function loadSettings() {
     loadCheckedSetting('showFutureMatches', 'true');
 
     loadValueSetting('debugMode', '');
-    loadValueSetting('tournamentType', 'Double Elimination');
+    loadValueSetting('tournamentType', 'Round Robin');
     loadValueSetting('maximumTournamentPlayers', '7');
     loadValueSetting('matchLengths', '5 5 5 5 5');
 
