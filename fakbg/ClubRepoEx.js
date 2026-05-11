@@ -3,27 +3,23 @@ const repoOwner = 'modiholodri';  // Repo Owner for the Club Repo
 const clubRepos = [   // Club Repos list, put the default one first
     {
         name: 'Fake Backgammon',
-        tpye: 'Club',
         repo: 'fakbg-ranking-list',
         suffix: 'fake',
     },
     {
-        name: 'Siam Backgammon',
-        tpye: 'Merger',
-        repo: 'siambg-ranking-list',
-        suffix: 'siam',
-    },
-    {
         name: 'Bangkok Backgammon',
-        tpye: 'Club',
         repo: 'bkk-bg-rating-list',
         suffix: 'bkk',
     },
     {
         name: 'Chiang Mai Backgammon',
-        tpye: 'Club',
         repo: 'cnxbg-ranking-list',
         suffix: 'cnx',
+    },
+    {  // The United Backgammon Merger, put it last. It has to have unitedbg in the repo name, so that we can identify it in the code and treat it differently when needed
+        name: 'United Backgammon',
+        repo: 'unitedbg-ranking-list',
+        suffix: 'siam',
     },
 ];
 

@@ -72,7 +72,7 @@ function loadSettings() {
             : '';
     }
     clubSelectionElement.value = clubSelection;
-    if (clubSelection === 'siambg-ranking-list') {
+    if (clubSelection.includes('unitedbg')) {
         document.getElementById('matchReportSection').style.display = 'none';
         document.getElementById('tournamentManagementSection').style.display = 'none';
     }
