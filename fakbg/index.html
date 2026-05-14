@@ -293,19 +293,20 @@
 
 
         <!-- Crapple Warning -->
-        <section id="crappleWarning" style="color: red;">
+        <section id="crappleWarning" style="color: red; display: none;">
             <hr class="rounded">
             <h3 style="color: red;">⚠️ Crapple Warning! ⚠️</h3>
                 <p>This website cannot store any settings and the functionality is degraded.</p>
                 <p> Your iPhone is blocking this website to use local storage/cookies, 
-                    which is usually due to unnecessary strict privacy settings in Safari or your system security policies.</p>
+                    which is usually due to Private Browsing mode or unnecessary strict privacy settings 
+                    in Safari or your system security policies.</p>
                 
                 <p>To fix this iPhone issue and get a better experience, follow these steps:</p>
                 <ul class="ms-3">
                     <li>Open the Settings.</li>
                     <li>Scroll down and tap Apps.</li>
                     <li>Scroll down and tap Safari.</li>
-                    <li>Under the Privacy & Security section, ensure Block All Cookies is toggled OFF.</li>
+                    <li>Under the Privacy & Security/Advanced section, ensure Block All Cookies is toggled OFF.</li>
                 </ul>
 
                 <p>Note: Apple limits local data and clears cached data for no reasons if a website is not visited for 7 days. 
@@ -582,10 +583,10 @@
                 localStorage.setItem('test', 'test');
                 localStorage.removeItem('test');
                 setHtmlStatus('<p style="color: green;">🎲 Enjoy your matches! 🎲</p>');
-                const crappleWarning = document.getElementById('crappleWarning');
-                if (crappleWarning) crappleWarning.style.display = 'none';
             } catch (e) {
                 setHtmlStatus('<p style="color: red;">⚠️ See Crapple Warning below. ⚠️</p>');
+                const crappleWarning = document.getElementById('crappleWarning');
+                if (crappleWarning) crappleWarning.style.display = 'block';
             }
         }
 
