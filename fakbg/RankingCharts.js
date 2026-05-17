@@ -1260,7 +1260,7 @@ function updatePlayerPositionChart(progressList) {
 
     const playerAnnotations = {};
 
-    // create the aannotations for the players who played in the last 14 days
+    // create the annotations for the players who played in the last 14 days
     sortedPlayers.forEach((player, idx) => {
         // const lastPlayedDate = playerProgress[player][playerProgress[player].length - 1].date;
         // const daysSinceLastPlayed = Math.floor((new Date() - new Date(lastPlayedDate)) / (1000 * 60 * 60 * 24));
