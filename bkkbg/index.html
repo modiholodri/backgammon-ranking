@@ -28,7 +28,7 @@
             <form id="matchReportForm" class="collapse">
                 <!-- Winner -->
                 <div class="input-group">
-                    <span id="winnerLabel" class="input-group-text" style="color: green;">Winner</span>
+                    <span id="winnerLabel" class="input-group-text" style="color: lime;">Winner</span>
                     <select id="winnerName" title="Winner Name" class="form-select">
                         <option value="Select">Select</option>
                         <option value="Not loaded...">Not loaded...</option>
@@ -36,7 +36,7 @@
                 </div>
                 <!-- Loser -->
                 <div class="input-group">
-                    <span class="input-group-text" style="color: red;">Loser</span>
+                    <span class="input-group-text" style="color: magenta;">Loser</span>
                     <select id="loserName" title="Loser Name" class="form-select">
                         <option value="Select">Select</option>
                         <option value="Not loaded...">Not loaded...</option>
@@ -292,6 +292,14 @@
         </section>
 
 
+        <!-- Tip of the Day -->
+        <section id="tipOfTheDay" style="display: none;">
+            <hr class="rounded">
+            <h3 type="button" onclick="showTipOfTheDay()">💡 ♻️ Tip of the Day ♻️ 💡</h3>
+            <div id="tipContent"></div>
+        </section>
+
+
         <!-- Crapple Warning -->
         <section id="crappleWarning" style="color: red; display: none;">
             <hr class="rounded">
@@ -317,7 +325,7 @@
         <!-- Footer -->
         <hr class="rounded">
         <footer class="text-center mt-4 mb-2" style="color: gray;">
-            <small>2026-05-11 &copy; Modiholodri</small>
+            <small>2026-05-17 &copy; Modiholodri</small>
         </footer>
     </div>
 
@@ -590,6 +598,60 @@
             }
         }
 
+        function showTipOfTheDay() {
+            const tipSection = document.getElementById('tipOfTheDay');
+            const tipContent = document.getElementById('tipContent');
+            if (!tipSection || !tipContent) return;
+
+            const repoName = document.getElementById('clubSelection').value;
+            if (!repoName) {
+                tipSection.style.display = 'none';
+                return;
+            }
+
+            const options = {
+                headers: {
+                    'Authorization': `token ${githubToken}`
+                }
+            };
+
+
+            fetch(`https://api.github.com/repos/${repoOwner}/backgammon-tips/contents/Tips`, options)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Tips folder not found');
+                    }
+                    return response.json();
+                })
+                .then(files => {
+                    if (!Array.isArray(files) || files.length === 0) {
+                        throw new Error('No tips available');
+                    }
+
+                    const markdownFiles = files.filter(file => file.type === 'file' && file.name.toLowerCase().endsWith('.md'));
+                    if (markdownFiles.length === 0) {
+                        throw new Error('No markdown tip files found');
+                    }
+
+                    const randomTip = markdownFiles[Math.floor(generator.random() * markdownFiles.length)];
+                    return fetch(`${randomTip.url}`, options);
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch tip markdown');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const fileContent = data.content ? decodeURIComponent(escape(window.atob(data.content))) : '';
+                    tipContent.innerHTML = marked.parse(fileContent);
+                    tipSection.style.display = 'block';
+                })
+                .catch(() => {
+                    tipSection.style.display = 'none';
+                });
+        }
+
         // Add DOM Content Loaded Event Listener
         document.addEventListener("DOMContentLoaded", () => {
             populateClubSelection(); // has to be done first so that the settings can be loaded correctly
@@ -620,6 +682,7 @@
             })();
 
             checkLocalStorageAvailable();
+            showTipOfTheDay();
         });
 
         // Auto-collapse other sections when one section is shown

@@ -1,14 +1,23 @@
 // default colors
-const wonForeColor = 'rgba(75, 192, 192, 1)';
-const wonBackColor = 'rgba(75, 192, 192, 0.3)';
+const wonForeColor = 'rgba(0, 255, 0, 1)';
+const wonBackColor = 'rgba(0, 255, 0, 0.3)';
 
-const lostForeColor = 'rgba(255, 99, 132, 1)';
-const lostBackColor = 'rgba(255, 99, 132, 0.3)';
+const lostForeColor = 'rgba(255, 0, 255, 1)';
+const lostBackColor = 'rgba(255, 0, 255, 0.3)';
 
-const gridColor = { color: 'rgba(255, 255, 0, 0.3)' };
-const chartColor = 'rgba(255, 255, 0, 0.7)';
-const middleLineColor = 'rgba(255, 0, 0, 0.5)';
+const neutralForeColor = 'rgba(54, 162, 255, 1)';
+const neutralBackColor = 'rgba(54, 162, 255, 0.3)';
+
+const highColor = 'rgba(0, 255, 0, 1)';
+const lowColor = 'rgba(255, 0, 255, 1)';
+
+const expectedColor = 'rgba(255, 255, 0, 0.7)';
+
 const playerLineColor = 'rgba(255, 255, 0, 0.5)';
+const middleLineColor = 'rgba(255, 0, 0, 0.5)';
+
+const chartColor = 'rgba(255, 255, 0, 0.7)';
+const gridColor = { color: 'rgba(255, 255, 0, 0.3)' };
 
 Chart.defaults.color = 'white';  // default text color
 Chart.defaults.borderColor = 'rgba(0, 0, 0, 0.0)';  // don't show the default grid
@@ -244,8 +253,8 @@ function updateRanglistenChart(matchListSummary) {
                     label: 'Bonus',
                     hidden: hiddenStates[1],
                     data: punkteBonus,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: neutralBackColor,
+                    borderColor: neutralForeColor,
                     borderWidth: 1
                 },
                 {
@@ -656,7 +665,7 @@ function updateRatingListChart(matchListSummary) {
                     pointStyle: 'star',
                     hidden: hiddenStates[0],
                     data: rating,
-                    borderColor: 'lime',
+                    borderColor: expectedColor,
                     pointHoverRadius: 18,
                     pointHitRadius: 24,
                     borderWidth: 1,
@@ -665,8 +674,8 @@ function updateRatingListChart(matchListSummary) {
                     label: 'Future Rating',
                     hidden: hiddenStates[1],
                     data: futureRating,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: neutralBackColor,
+                    borderColor: neutralForeColor,
                     borderWidth: 1,
                 },
             ]
@@ -792,7 +801,7 @@ function updateWinningPercentChart(matchListSummary) {
                     type: 'scatter',
                     pointStyle: 'star',
                     hidden: hiddenStates[0],
-                    borderColor: 'lime',
+                    borderColor: expectedColor,
                     pointHoverRadius: 18,
                     pointHitRadius: 24,
                     borderWidth: 1,
@@ -801,8 +810,8 @@ function updateWinningPercentChart(matchListSummary) {
                     label: '% Expected to Win',
                     data: expectedMatchesWon,
                     hidden: hiddenStates[1],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: neutralBackColor,
+                    borderColor: neutralForeColor,
                     borderWidth: 1,
                 },
             ]
@@ -960,7 +969,7 @@ function updatePlayerProgressChart(progressList) {
                 'rgba(0,255,0,1)',      // bright green
                 'rgba(255,20,147,1)',   // deep pink
                 'rgba(75,0,130,1)',     // indigo
-                'rgba(0,0,139,1)',      // dark blue
+                'rgba(0,0,200,1)',      // dark blue
                 'rgba(255,69,0,1)',     // red-orange
                 'rgba(139,0,0,1)',      // dark red
                 'rgba(0,206,209,1)',    // dark turquoise
@@ -995,7 +1004,7 @@ function updatePlayerProgressChart(progressList) {
     const playerAnnotations = {};
     const activeSortedPlayers = sortedPlayers.filter(player => activePlayers.has(player));
 
-    // create the aannotations for the players who played in the last 14 days
+    // create the annotations for the players who played in the last 14 days
     activeSortedPlayers.forEach((player, idx) => {
         const lastPlayedDate = playerProgress[player][playerProgress[player].length - 1].date;
         const daysSinceLastPlayed = Math.floor((new Date() - new Date(lastPlayedDate)) / (1000 * 60 * 60 * 24));
@@ -1138,8 +1147,8 @@ function reverseLens(y, center = 1800, radius = 100, X = 2.0) {
 
 function reverseLensToAxis(value) {
     const axisValue = reverseLens(value);
-    const formatedvalue = axisValue.toLocaleString('en-US', { maximumFractionDigits: 0 })
-    return formatedvalue;
+    const formattedValue = axisValue.toLocaleString('en-US', { maximumFractionDigits: 0 })
+    return formattedValue;
 }
 
 // Create or update the Player Progress chart
@@ -1251,7 +1260,7 @@ function updatePlayerPositionChart(progressList) {
 
     const playerAnnotations = {};
 
-    // create the aannotations for the players who played in the last 14 days
+    // create the annotations for the players who played in the last 14 days
     sortedPlayers.forEach((player, idx) => {
         // const lastPlayedDate = playerProgress[player][playerProgress[player].length - 1].date;
         // const daysSinceLastPlayed = Math.floor((new Date() - new Date(lastPlayedDate)) / (1000 * 60 * 60 * 24));
@@ -1399,7 +1408,7 @@ function updateScoresChart(scoresSummary) {
                     pointStyle: 'star',
                     hidden: hiddenStates[2],
                     data: lowScore,
-                    borderColor: 'red',
+                    borderColor: lowColor,
                     pointHoverRadius: 18,
                     pointHitRadius: 24,
                     borderWidth: 1,
@@ -1408,8 +1417,8 @@ function updateScoresChart(scoresSummary) {
                     label: 'Current',
                     hidden: hiddenStates[1],
                     data: currentScore,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: neutralBackColor,
+                    borderColor: neutralForeColor,
                     borderWidth: 1
                 },
                 {
@@ -1418,7 +1427,7 @@ function updateScoresChart(scoresSummary) {
                     pointStyle: 'star',
                     hidden: hiddenStates[0],
                     data: highScore,
-                    borderColor: 'lime',
+                    borderColor: highColor,
                     pointHoverRadius: 18,
                     pointHitRadius: 24,
                     borderWidth: 1,
@@ -1675,8 +1684,8 @@ function updateLastActiveChart(rankingSummary) {
                 {
                     label: 'Last Active Date',
                     data: lastDatesActive,
-                    backgroundColor: wonBackColor,
-                    borderColor: playerLineColor,
+                    backgroundColor: neutralBackColor,
+                    borderColor: neutralForeColor,
                     pointHoverRadius: 18,
                     pointHitRadius: 24,
                     borderWidth: 1,

@@ -819,7 +819,7 @@ function highlightTodaysMatches() {
                 if (tournamentLines[j].match(roundRobinMatchRegex)) { // Round/Rigid Robin match
                     tournamentLines[j] = tournamentLines[j].replace(
                         roundRobinMatchRegex,
-                        `<span style="color: green;">${winner}</span> &lt; ${matchLength} &gt; <span style="color: red;">${loser}</span><br>`
+                        `<span style="color: lime;">${winner}</span> &lt; ${matchLength} &gt; <span style="color: magenta;">${loser}</span><br>`
                     );
 
                     // Replace Loser and Winner references in the rest of the tournament
@@ -854,7 +854,7 @@ function highlightTodaysMatches() {
                     if (j < tournamentLines.length - 5 || i > todaysMatches.length - 2) {
                         tournamentLines[j] = tournamentLines[j].replace(
                             doubleEliminationMatchRegex,
-                            `<span style="color: green;">${winner}</span> &lt; ${matchLength} &gt; <span style="color: red;">${loser}</span><br>`
+                            `<span style="color: lime;">${winner}</span> &lt; ${matchLength} &gt; <span style="color: magenta;">${loser}</span><br>`
                         );
                     }
 
@@ -916,7 +916,7 @@ function highlightTodaysMatches() {
             const winner = matchInfo[2];
             const loser = matchInfo[3];
             const matchLength = matchInfo[4];
-            tournamentLines.push(`<span style="color: green;">${winner}</span> &lt; ${matchLength} &gt; <span style="color: red;">${loser}</span><br>\n`);
+            tournamentLines.push(`<span style="color: lime;">${winner}</span> &lt; ${matchLength} &gt; <span style="color: magenta;">${loser}</span><br>\n`);
         }
     }
 
