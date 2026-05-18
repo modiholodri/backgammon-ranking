@@ -295,12 +295,8 @@
         <!-- Tip of the Day -->
         <section id="tipOfTheDay">
             <hr class="rounded">
-            <h3 type="button" onclick="showTipOfTheDay()">💡 ♻️ Tip of the Day ♻️ 💡</h3>
-            <div id="tipContent">
-                <div style="align-items: center; text-align: center;">
-                    <p style="color: yellow;">Click above to view a tip!</p>
-                </div>
-            </div>
+            <h3 type="button" onclick="showTipOfTheDay()">♻️ Tip of the Day ♻️</h3>
+            <div id="tipContent"></div>
         </section>
 
 
@@ -661,6 +657,7 @@
                     const fileContent = data.content ? decodeURIComponent(escape(window.atob(data.content))) : '';
                     tipContent.innerHTML = marked.parse(fileContent);
                     tipSection.style.display = 'block';
+                    autoCollapse('tipOfTheDay');
                 })
                 .catch(() => {
                     tipSection.style.display = 'none';
@@ -702,6 +699,9 @@
 
         // Auto-collapse other sections when one section is shown
         function autoCollapse(elementName) {
+            if (elementName !== 'tipOfTheDay') {
+                restTipOfTheDay();
+            }
             if (!document.getElementById('autoCollapseSections').checked) return;
 
             switch (elementName) {
@@ -723,8 +723,16 @@
                 case 'settings':
                     collapseElements(['matchReportForm', 'tournamentManagement', 'ratingList', 'rankingLists', 'readMe']);
                     break;
+                case 'tipOfTheDay':
+                    collapseElements(['matchReportForm', 'tournamentManagement', 'ratingList', 'rankingLists', 'readMe', 'settings']);
+                    break;
             }
         }
+
+        function restTipOfTheDay() {
+            const tipContent = document.getElementById('tipContent');
+            if (tipContent) tipContent.innerHTML = ``;
+        }   
 
         function collapseElement(elementName) {
             const element = document.getElementById(elementName);
