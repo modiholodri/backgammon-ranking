@@ -296,8 +296,10 @@
         <section id="tipOfTheDay">
             <hr class="rounded">
             <h3 type="button" onclick="showTipOfTheDay()">💡 ♻️ Tip of the Day ♻️ 💡</h3>
-            <div id="tipContent" style="align-items: center; text-align: center;">
-                <p style="color: yellow;">Click above to view a tip!</p>
+            <div id="tipContent">
+                <div style="align-items: center; text-align: center;">
+                    <p style="color: yellow;">Click above to view a tip!</p>
+                </div>
             </div>
         </section>
 
@@ -328,6 +330,7 @@
         <hr class="rounded">
         <footer class="text-center mt-4 mb-2" style="color: gray;">
             <small>2026-05-17 &copy; Modiholodri</small>
+            <div id="statusBadge"></div>
         </footer>
     </div>
 
@@ -518,6 +521,15 @@
             }
         }
 
+// [![Report Match](https://github.com/modiholodri/bkk-bg-rating-list/actions/workflows/report_match.yml/badge.svg)](https://github.com/modiholodri/bkk-bg-rating-list/actions/workflows/report_match.yml)
+
+        function updateStatusBadge() {
+            const repoName = document.getElementById('clubSelection').value;
+            const badgeMarkdown = `[![Report Match](https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml/badge.svg)]` + 
+                                   `(https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml)`;
+            document.getElementById('statusBadge').innerHTML = marked.parse(badgeMarkdown);
+        }
+
         // Backgammon Club Selection Changed
         function clubSelectionChanged() {
             destroyRankingChart("Not loaded yet...");
@@ -539,6 +551,7 @@
             fetchMatchList();
             clearSubmissionStatus();
             fetchFrequentPlayers();
+            updateStatusBadge();
         }
 
     </script>
@@ -684,6 +697,7 @@
             })();
 
             checkLocalStorageAvailable();
+            updateStatusBadge();
         });
 
         // Auto-collapse other sections when one section is shown
