@@ -293,10 +293,12 @@
 
 
         <!-- Tip of the Day -->
-        <section id="tipOfTheDay" style="display: none;">
+        <section id="tipOfTheDay">
             <hr class="rounded">
             <h3 type="button" onclick="showTipOfTheDay()">💡 ♻️ Tip of the Day ♻️ 💡</h3>
-            <div id="tipContent"></div>
+            <div id="tipContent" style="align-items: center; text-align: center;">
+                <p style="color: yellow;">Click above to view a tip!</p>
+            </div>
         </section>
 
 
@@ -590,7 +592,7 @@
             try {
                 localStorage.setItem('test', 'test');
                 localStorage.removeItem('test');
-                setHtmlStatus('<p style="color: lime;">🎲 Enjoy your matches! 🎲</p>');
+                setHtmlStatus('<p style="color: yellow;">🎲 Enjoy your matches! 🎲</p>');
             } catch (e) {
                 setHtmlStatus('<p style="color: red;">⚠️ See Crapple Warning below. ⚠️</p>');
                 const crappleWarning = document.getElementById('crappleWarning');
@@ -682,7 +684,6 @@
             })();
 
             checkLocalStorageAvailable();
-            showTipOfTheDay();
         });
 
         // Auto-collapse other sections when one section is shown
