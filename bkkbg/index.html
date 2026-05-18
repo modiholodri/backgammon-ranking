@@ -293,9 +293,9 @@
 
 
         <!-- Tip of the Day -->
-        <section id="tipOfTheDay" style="display: none;">
+        <section id="tipOfTheDay">
             <hr class="rounded">
-            <h3 type="button" onclick="showTipOfTheDay()">💡 ♻️ Tip of the Day ♻️ 💡</h3>
+            <h3 type="button" onclick="showTipOfTheDay()">♻️ Tip of the Day ♻️</h3>
             <div id="tipContent"></div>
         </section>
 
@@ -326,6 +326,7 @@
         <hr class="rounded">
         <footer class="text-center mt-4 mb-2" style="color: gray;">
             <small>2026-05-17 &copy; Modiholodri</small>
+            <div id="statusBadge"></div>
         </footer>
     </div>
 
@@ -354,6 +355,8 @@
         let ranglistenSummary = {};  // summary for the Rangliste
         let playerSummary = {};  // summary for a player
         let playerProgressList = {};  // summary for the progression over time
+
+        let cachedTipOfTheDayFiles = null;  // cache for tip of the day files
 
         document.getElementById('generateTournamentButton').addEventListener('click', function() {
             const playersList = document.getElementById('playersList');
@@ -516,6 +519,15 @@
             }
         }
 
+// [![Report Match](https://github.com/modiholodri/bkk-bg-rating-list/actions/workflows/report_match.yml/badge.svg)](https://github.com/modiholodri/bkk-bg-rating-list/actions/workflows/report_match.yml)
+
+        function updateStatusBadge() {
+            const repoName = document.getElementById('clubSelection').value;
+            const badgeMarkdown = `[![Report Match](https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml/badge.svg)]` + 
+                                   `(https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml)`;
+            document.getElementById('statusBadge').innerHTML = marked.parse(badgeMarkdown);
+        }
+
         // Backgammon Club Selection Changed
         function clubSelectionChanged() {
             destroyRankingChart("Not loaded yet...");
@@ -537,6 +549,7 @@
             fetchMatchList();
             clearSubmissionStatus();
             fetchFrequentPlayers();
+            updateStatusBadge();
         }
 
     </script>
@@ -590,7 +603,7 @@
             try {
                 localStorage.setItem('test', 'test');
                 localStorage.removeItem('test');
-                setHtmlStatus('<p style="color: green;">🎲 Enjoy your matches! 🎲</p>');
+                setHtmlStatus('<p style="color: yellow;">🎲 Enjoy your matches! 🎲</p>');
             } catch (e) {
                 setHtmlStatus('<p style="color: red;">⚠️ See Crapple Warning below. ⚠️</p>');
                 const crappleWarning = document.getElementById('crappleWarning');
@@ -615,41 +628,62 @@
                 }
             };
 
+            const loadTip = () => {
+                if (!cachedTipOfTheDayFiles || cachedTipOfTheDayFiles.length === 0) {
+                    throw new Error('No tip of the day files available');
+                }
 
-            fetch(`https://api.github.com/repos/${repoOwner}/backgammon-tips/contents/Tips`, options)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Tips folder not found');
-                    }
-                    return response.json();
-                })
-                .then(files => {
-                    if (!Array.isArray(files) || files.length === 0) {
-                        throw new Error('No tips available');
-                    }
+                const randomTip = cachedTipOfTheDayFiles[Math.floor(generator.random() * cachedTipOfTheDayFiles.length)];
+                fetch(`${randomTip.url}`, options)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch tip markdown');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const fileContent = data.content ? decodeURIComponent(escape(window.atob(data.content))) : '';
+                        tipContent.innerHTML = marked.parse(fileContent);
+                        tipSection.style.display = 'block';
+                        autoCollapse('tipOfTheDay');
+                        // scroll to the end of the Tip of the Day section so the tip is visible
+                        setTimeout(() => {
+                            try {
+                                tipSection.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                            } catch (e) {
+                                tipSection.scrollIntoView();
+                            }
+                        }, 100);
+                    })
+                    .catch(() => {
+                        tipSection.style.display = 'none';
+                    });
+            };
 
-                    const markdownFiles = files.filter(file => file.type === 'file' && file.name.toLowerCase().endsWith('.md'));
-                    if (markdownFiles.length === 0) {
-                        throw new Error('No markdown tip files found');
-                    }
+            // If files are already cached, load a random tip directly
+            if (cachedTipOfTheDayFiles && Array.isArray(cachedTipOfTheDayFiles) && cachedTipOfTheDayFiles.length > 0) {
+                loadTip();
+            } else {
+                // Load the list of tip files first, then load a random tip
+                fetch(`https://api.github.com/repos/${repoOwner}/backgammon-tips/contents/Tips`, options)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Tips folder not found');
+                        }
+                        return response.json();
+                    })
+                    .then(files => {
+                        if (!Array.isArray(files) || files.length === 0) {
+                            throw new Error('No tips available');
+                        }
 
-                    const randomTip = markdownFiles[Math.floor(generator.random() * markdownFiles.length)];
-                    return fetch(`${randomTip.url}`, options);
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch tip markdown');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const fileContent = data.content ? decodeURIComponent(escape(window.atob(data.content))) : '';
-                    tipContent.innerHTML = marked.parse(fileContent);
-                    tipSection.style.display = 'block';
-                })
-                .catch(() => {
-                    tipSection.style.display = 'none';
-                });
+                        cachedTipOfTheDayFiles = files.filter(file => file.type === 'file' && file.name.toLowerCase().endsWith('.md'));
+                        if (cachedTipOfTheDayFiles.length === 0) {
+                            throw new Error('No tip of the day files found');
+                        }
+                        loadTip();
+                    });
+            }
         }
 
         // Add DOM Content Loaded Event Listener
@@ -682,11 +716,14 @@
             })();
 
             checkLocalStorageAvailable();
-            showTipOfTheDay();
+            updateStatusBadge();
         });
 
         // Auto-collapse other sections when one section is shown
         function autoCollapse(elementName) {
+            if (elementName !== 'tipOfTheDay') {
+                restTipOfTheDay();
+            }
             if (!document.getElementById('autoCollapseSections').checked) return;
 
             switch (elementName) {
@@ -708,8 +745,16 @@
                 case 'settings':
                     collapseElements(['matchReportForm', 'tournamentManagement', 'ratingList', 'rankingLists', 'readMe']);
                     break;
+                case 'tipOfTheDay':
+                    collapseElements(['matchReportForm', 'tournamentManagement', 'ratingList', 'rankingLists', 'readMe', 'settings']);
+                    break;
             }
         }
+
+        function restTipOfTheDay() {
+            const tipContent = document.getElementById('tipContent');
+            if (tipContent) tipContent.innerHTML = ``;
+        }   
 
         function collapseElement(elementName) {
             const element = document.getElementById(elementName);
