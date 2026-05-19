@@ -298,12 +298,12 @@
             <hr class="rounded">
             <h3 type="button" onclick="showTipOfTheDay()">♻️ Tip of the Day ♻️</h3>
             <div id="tipContent"></div>
+            <hr id="tipOfTheDaySeparator" class="rounded">
         </section>
 
 
         <!-- Crapple Warning -->
         <section id="crappleWarning" style="color: red; display: none;">
-            <hr class="rounded">
             <h3 style="color: red;">⚠️ Crapple Warning! ⚠️</h3>
                 <p>This website cannot store any settings and the functionality is degraded.</p>
                 <p> Your iPhone is blocking this website to use local storage/cookies, 
@@ -320,11 +320,11 @@
 
                 <p>Note: Apple limits local data and clears cached data for no reasons if a website is not visited for 7 days. 
                     Since there is no workaround available, visit this web site frequently!</p>
+            <hr class="rounded">
         </section>
 
 
         <!-- Footer -->
-        <hr class="rounded">
         <footer class="text-center mt-4 mb-2" style="color: gray;">
             <small>2026-05-17 &copy; Modiholodri</small>
             <div id="statusBadge"></div>
@@ -649,10 +649,11 @@
                         autoCollapse('tipOfTheDay');
                         // scroll to the end of the Tip of the Day section so the tip is visible
                         setTimeout(() => {
+                            const tipOfTheDaySeparator = document.getElementById('tipOfTheDaySeparator');
                             try {
-                                tipSection.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                                tipOfTheDaySeparator.scrollIntoView({ behavior: 'smooth', block: 'end' });
                             } catch (e) {
-                                tipSection.scrollIntoView();
+                                tipOfTheDaySeparator.scrollIntoView();
                             }
                         }, 100);
                     })
