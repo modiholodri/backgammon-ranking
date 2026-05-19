@@ -524,9 +524,11 @@
 
         function updateStatusBadge() {
             const repoName = document.getElementById('clubSelection').value;
-            const badgeMarkdown = `[![Report Match](https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml/badge.svg)]` + 
-                                   `(https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml)`;
-            document.getElementById('statusBadge').innerHTML = marked.parse(badgeMarkdown);
+            if (!repoName.includes('unitedbg')) {  // there is not match to report for the united backgammon club
+                const badgeMarkdown = `[![Report Match](https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml/badge.svg)]` + 
+                                    `(https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml)`;
+                document.getElementById('statusBadge').innerHTML = marked.parse(badgeMarkdown);
+            }
         }
 
         // Backgammon Club Selection Changed
