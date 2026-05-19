@@ -785,10 +785,11 @@
                     autoCollapse(elementName);
                 }
                 
-                if (elementName === 'rankingChart') {  // refresh the ranking chart if it is made visible
-                    const rankingCharJustShown = document.getElementById(elementName).classList.contains('show');
-                    if (rankingCharJustShown) {
+                if (elementName === 'rankingChart' || elementName === 'rankingLists') {  // refresh the ranking chart if it is made visible
+                    const rankingChartJustShown = document.getElementById(elementName).classList.contains('show');
+                    if (rankingChartJustShown) {
                         rankingListSelectionManuallyChanged();
+                        rankingChart?.resize();
                     }
                 }
             });
