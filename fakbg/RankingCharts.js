@@ -13,8 +13,8 @@ const lowColor = 'rgba(255, 0, 255, 1)';
 
 const expectedColor = 'rgba(255, 255, 0, 0.7)';
 
-const playerLineColor = 'rgba(255, 255, 0, 0.5)';
-const middleLineColor = 'rgba(255, 0, 0, 0.5)';
+const playerLineColor = 'rgba(255, 255, 0, 1)';
+const middleLineColor = 'rgba(0, 255, 255, 1)';
 
 const chartColor = 'rgba(255, 255, 0, 0.7)';
 const gridColor = { color: 'rgba(255, 255, 0, 0.3)' };
