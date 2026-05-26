@@ -97,6 +97,8 @@ function highlightYourNameInTable(tableHTML) {
     return tableHTML;
 }
 
+let frequentPlayersList = [];
+
 // Fetch the Frequent Players
 function fetchFrequentPlayers() {
     const repoName = document.getElementById('clubSelection').value;
@@ -116,12 +118,12 @@ function fetchFrequentPlayers() {
         if (data.content) {
             const fileContent = decodeURIComponent(escape(window.atob( data.content )));
 
-            const frequentPlayers = fileContent.split("\n");
-            let playersList = '';
+            frequentPlayersList = fileContent.split("\n").filter(entry => entry.trim().length > 0);
 
-            for (let i = 0; i < frequentPlayers.length; i++) {
-                if (frequentPlayers[i].length > 0) {
-                    playersList += `<option class="centered" value="${frequentPlayers[i]}">${frequentPlayers[i]}</option>\n`;
+            let playersList = '';
+            for (let i = 0; i < frequentPlayersList.length; i++) {
+                if (frequentPlayersList[i].length > 0) {
+                    playersList += `<option class="centered" value="${frequentPlayersList[i]}">${frequentPlayersList[i]}</option>\n`;
                 }
             }
             const playerOptions = '<option class="centered" value="Select">Select</option>\n' + playersList;
@@ -154,6 +156,92 @@ function fetchFrequentPlayers() {
     })
     .catch(error => console.error('Error:', error));
 }
+
+// Add a new frequent player in alphabetical order
+function addFrequentPlayer(playerName) {
+    if (!playerName || typeof playerName !== 'string') return false;
+    const trimmedName = playerName.trim();
+    if (trimmedName.length === 0) return false;
+
+    if (!Array.isArray(frequentPlayersList)) frequentPlayersList = [];
+
+    const alreadyExists = frequentPlayersList.some(name => name.trim().toLowerCase() === trimmedName.toLowerCase());
+    if (alreadyExists) {
+        alert(`Player "${trimmedName}" is already in the frequent players list.`);
+        return false;
+    }
+
+    frequentPlayersList.push(trimmedName);
+    frequentPlayersList.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+    return true;
+}
+
+async function uploadFrequentPlayers() {
+    // prevent spamming GitHub
+    if (Date.now() - lastUploadTime < 5000) {
+        alert('Hold your horses you can only upload something every 5 seconds! Check the Submission Status section above...');
+        return;
+    }
+    lastUploadTime = Date.now();
+
+    const newPlayerName = document.getElementById('newPlayer').value;
+    if (addFrequentPlayer(newPlayerName)) {
+        document.getElementById('newPlayer').value = '';
+    }
+    else {
+        alert('Please enter a valid player name that is not already in the list.');
+        return;
+    }
+
+    let playersList = '';
+    for (let i = 0; i < frequentPlayersList.length; i++) {
+        if (frequentPlayersList[i].length > 0) {
+            playersList += `${frequentPlayersList[i]}\n`;
+        }
+    }
+
+
+    const repoName = document.getElementById('clubSelection').value;
+
+    await refreshRunsStatus();
+    setSubmissionStatus(`Uploading frequent players...`);
+    setRunsInfo('Hold on a sec...');
+    previousRunID = latestRunID;
+    if ( latestRunStatus === 'Submitting' || latestRunStatus === 'Queued' || latestRunStatus === 'In Progress') {
+        setSubmissionStatus('Another submission in progress.\nTry again in a few seconds...');
+        anotherSubmissionActive = true;
+        document.getElementById("submit").disabled = true;
+        document.getElementById("startTournamentButton").disabled = true;
+        document.getElementById("finishTournamentButton").disabled = true;
+    }
+    else try {
+        await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/dispatches`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `token ${githubToken}`,
+                'Content-Type': 'text/html',
+                'Accept': 'application/vnd.github.v3+json',
+            },
+            body: JSON.stringify({ 
+                event_type: 'update_frequent_players', 
+                client_payload: { 
+                    frequent_players_list: `${playersList}`,
+                } 
+            })
+        });
+
+        newSubmission = true;
+        document.getElementById("submit").disabled = true;
+        document.getElementById("startTournamentButton").disabled = true;
+        document.getElementById("finishTournamentButton").disabled = true;
+    } 
+    catch (error) { 
+        // Error triggering GitHub Action: Failed to execute 'json' on 'Response': Unexpected end of JSON input
+        alert('Error uploading the frequent players: ' + error.message); // Handle error (e.g., notify user, retry, etc.)
+    }
+}
+
+
 
 // Synchronously fetch the RatingList Markdown file and return its content
 function fetchMarkDownFromRepoSync(fileName, elementName) {
