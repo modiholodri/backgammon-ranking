@@ -85,9 +85,10 @@
                 </div>
 
                 <!-- Tournament Director -->
-                <h5 id="tournamentDirectorToggle" type="button" data-toggle="collapse" data-target="#tournamentDirector" aria-expanded="false" aria-controls="tournamentDirector">
+                <hr class="rounded">
+                <h4 id="tournamentDirectorToggle" type="button" style="color: gray;" data-toggle="collapse" data-target="#tournamentDirector" aria-expanded="false" aria-controls="tournamentDirector">
                     Tournament Director ⇅
-                </h5>
+                </h4>
                 <div id="tournamentDirector" class="collapse">
                     <div class="input-group">
                         <span class="input-group-text">Type</span>
@@ -120,7 +121,7 @@
                             <input id="maximumTournamentPlayers" type="text" title="Maximum Tournament Players" class="form-control centered" aria-describedby="maximumTournamentPlayersLabel">
                         </div>
                         <div class="input-group w-100 mt-2">
-                            <span class="input-group-text" id="matchLengthsLabel">Match Lengths</span>
+                            <span class="input-group-text" id="matchLengthsLabel">Match Lengths/Round</span>
                             <input id="matchLengths" value="5 5 5 5 5" type="text" title="Match Lengths" class="form-control centered" aria-describedby="matchLengthsLabel">
                         </div>
                         <div class="input-group w-100 mt-2">
@@ -297,12 +298,12 @@
             <hr class="rounded">
             <h3 type="button" onclick="showTipOfTheDay()">♻️ Tip of the Day ♻️</h3>
             <div id="tipContent"></div>
+            <hr id="tipOfTheDaySeparator" class="rounded">
         </section>
 
 
         <!-- Crapple Warning -->
         <section id="crappleWarning" style="color: red; display: none;">
-            <hr class="rounded">
             <h3 style="color: red;">⚠️ Crapple Warning! ⚠️</h3>
                 <p>This website cannot store any settings and the functionality is degraded.</p>
                 <p> Your iPhone is blocking this website to use local storage/cookies, 
@@ -319,13 +320,13 @@
 
                 <p>Note: Apple limits local data and clears cached data for no reasons if a website is not visited for 7 days. 
                     Since there is no workaround available, visit this web site frequently!</p>
+            <hr class="rounded">
         </section>
 
 
         <!-- Footer -->
-        <hr class="rounded">
         <footer class="text-center mt-4 mb-2" style="color: gray;">
-            <small>2026-05-17 &copy; Modiholodri</small>
+            <small>2026-05-28 &copy; Modiholodri</small>
             <div id="statusBadge"></div>
         </footer>
     </div>
@@ -523,9 +524,11 @@
 
         function updateStatusBadge() {
             const repoName = document.getElementById('clubSelection').value;
-            const badgeMarkdown = `[![Report Match](https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml/badge.svg)]` + 
-                                   `(https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml)`;
-            document.getElementById('statusBadge').innerHTML = marked.parse(badgeMarkdown);
+            if (!repoName.includes('unitedbg')) {  // there is not match to report for the united backgammon club
+                const badgeMarkdown = `[![Report Match](https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml/badge.svg)]` + 
+                                    `(https://github.com/${repoOwner}/${repoName}/actions/workflows/report_match.yml)`;
+                document.getElementById('statusBadge').innerHTML = marked.parse(badgeMarkdown);
+            }
         }
 
         // Backgammon Club Selection Changed
@@ -648,10 +651,11 @@
                         autoCollapse('tipOfTheDay');
                         // scroll to the end of the Tip of the Day section so the tip is visible
                         setTimeout(() => {
+                            const tipOfTheDaySeparator = document.getElementById('tipOfTheDaySeparator');
                             try {
-                                tipSection.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                                tipOfTheDaySeparator.scrollIntoView({ behavior: 'smooth', block: 'end' });
                             } catch (e) {
-                                tipSection.scrollIntoView();
+                                tipOfTheDaySeparator.scrollIntoView();
                             }
                         }, 100);
                     })
@@ -781,10 +785,11 @@
                     autoCollapse(elementName);
                 }
                 
-                if (elementName === 'rankingChart') {  // refresh the ranking chart if it is made visible
-                    const rankingCharJustShown = document.getElementById(elementName).classList.contains('show');
-                    if (rankingCharJustShown) {
+                if (elementName === 'rankingChart' || elementName === 'rankingLists') {  // refresh the ranking chart if it is made visible
+                    const rankingChartJustShown = document.getElementById(elementName).classList.contains('show');
+                    if (rankingChartJustShown) {
                         rankingListSelectionManuallyChanged();
+                        rankingChart?.resize();
                     }
                 }
             });

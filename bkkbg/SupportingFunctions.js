@@ -97,6 +97,8 @@ function highlightYourNameInTable(tableHTML) {
     return tableHTML;
 }
 
+let frequentPlayersList = [];
+
 // Fetch the Frequent Players
 function fetchFrequentPlayers() {
     const repoName = document.getElementById('clubSelection').value;
@@ -116,12 +118,12 @@ function fetchFrequentPlayers() {
         if (data.content) {
             const fileContent = decodeURIComponent(escape(window.atob( data.content )));
 
-            const frequentPlayers = fileContent.split("\n");
-            let playersList = '';
+            frequentPlayersList = fileContent.split("\n").filter(entry => entry.trim().length > 0);
 
-            for (let i = 0; i < frequentPlayers.length; i++) {
-                if (frequentPlayers[i].length > 0) {
-                    playersList += `<option class="centered" value="${frequentPlayers[i]}">${frequentPlayers[i]}</option>\n`;
+            let playersList = '';
+            for (let i = 0; i < frequentPlayersList.length; i++) {
+                if (frequentPlayersList[i].length > 0) {
+                    playersList += `<option class="centered" value="${frequentPlayersList[i]}">${frequentPlayersList[i]}</option>\n`;
                 }
             }
             const playerOptions = '<option class="centered" value="Select">Select</option>\n' + playersList;
